@@ -13,7 +13,11 @@ export const MECHANISMS: Record<string, { label: string; explain: string }> = {
   },
   fdi_income: {
     label: 'Profits to foreign owners (FDI)',
-    explain: "The foreign owner's share of operating surplus, followed to the ultimate owner's country where the source allows.",
+    explain: "Profit of foreign-controlled firms after depreciation, interest and Cypriot corporate tax, times the non-resident share of their equity; the country is that of the firm's ultimate controlling owner.",
+  },
+  fdi_debt_interest: {
+    label: 'Interest to foreign parent companies',
+    explain: "Interest foreign-controlled firms pay to their own foreign parents or affiliates (intra-group loans); interest they owe to Cypriot lenders stays in Cyprus.",
   },
   portfolio_income: {
     label: 'Portfolio income to non-residents',
@@ -36,6 +40,7 @@ export const MECHANISMS: Record<string, { label: string; explain: string }> = {
 export const MECH_ORDER = [
   'compensation_nonresident',
   'fdi_income',
+  'fdi_debt_interest',
   'portfolio_income',
   'other_investment_income',
   'public_debt_interest',

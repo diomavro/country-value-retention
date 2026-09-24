@@ -12,6 +12,7 @@ export const MECH_COLOR: Record<string, string> = {
   retained_domestic: 'var(--retained)',
   compensation_nonresident: 'var(--s1)',
   fdi_income: 'var(--s2)',
+  fdi_debt_interest: 'var(--s7)',
   portfolio_income: 'var(--s3)',
   other_investment_income: 'var(--s4)',
   public_debt_interest: 'var(--s5)',
