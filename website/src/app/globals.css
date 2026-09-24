@@ -162,7 +162,8 @@ table.data tr.sel td { background: var(--surface-2); }
 
 .stackbar { display: flex; height: 26px; border-radius: 4px; overflow: hidden; gap: 2px; background: var(--surface); }
 .stackbar > div { min-width: 1px; }
-.md { max-width: 78ch; }
+.md { max-width: min(78ch, 100%); min-width: 0; overflow-wrap: anywhere; }
+.md pre, .md table { max-width: 100%; }
 .md table { border-collapse: collapse; display: block; overflow-x: auto; font-size: 0.9rem; }
 .md th, .md td { border-bottom: 1px solid var(--grid); padding: 0.3rem 0.5rem; text-align: left; }
 .md blockquote { border-left: 3px solid var(--axis); margin: 0.75rem 0; padding: 0.1rem 0.9rem; color: var(--ink-2); }
