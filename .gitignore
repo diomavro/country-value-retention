@@ -1,0 +1,38 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+# raw downloads are re-created by `make ingest`; only manifests/checksums are tracked
+data/raw/**
+!data/raw/**/
+!data/raw/**/MANIFEST.csv
+!data/raw/**/*.md
+!data/raw/companies/*.csv
+data/interim/
+data/*.duckdb
+# LaTeX
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+# website
+website/node_modules/
+website/.next/
+website/out/
+# scripts that re-create raw data, and the hand-built company layer (sources inside)
+!data/raw/companies/_build/*.py
+!data/raw/companies/_fragments/*.csv
+# full-text extracts of third-party filings stay local (copyright); URLs are in SOURCES.md
+data/raw/companies/docs/
+data/pipeline.log
+data/chain.log
+.review/
+
+# internal workflow state and simulated review reports stay local
+pipeline-state.json
+reports/

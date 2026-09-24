@@ -1,0 +1,50 @@
+\section{Related Literature}
+\label{sec:literature}
+
+This paper joins three literatures that measure the same object---the destination of value added generated on a territory---from different sides, and that have so far been kept apart.
+
+The first is the input--output literature on value added in trade.
+Building on \citet{Leontief1936} and the domestic/imported coefficient split in \citet{MillerBlair2009}, \citet{HummelsIshiiYi2001} measure the import content of exports, \citet{JohnsonNoguera2012} define value-added exports, and \citet{KoopmanWangWei2014} and \citet{LosTimmerdeVries2016} decompose gross exports into value-added and double-counted terms.
+\citet{LosTimmerdeVries2015} show that the foreign value-added share of final manufactures has risen almost everywhere.
+Surveys by \citet{Johnson2018} and \citet{AntrasChor2022} make clear that these measures, and the databases that implement them \citep{Timmeretal2015,Yamanoetal2021,Eurostat2019FIGARO,Ahmadetal2017}, attribute value added to the country where production takes place.
+We borrow their double-counting logic but ask a different question: not where value is \emph{produced}, but who \emph{receives} it.
+
+The second literature slices value chains by factor income.
+\citet{Timmeretal2013} introduce ``GVC income'', \citet{Timmeretal2014} show that the capital share of value-chain income has risen, and \citet{TimmerMiroudotdeVries2019} document functional specialisation across countries.
+\citet{ChenLosTimmer2018} attribute a large and growing residual to intangible capital and note that its location is recorded where intellectual property is registered.
+This is exactly the case in a holding-company jurisdiction such as Cyprus, and it motivates the step these papers leave out: allocating capital income to the residence of its owner.
+
+A closely related strand splits input--output tables by firm ownership.
+The OECD AMNE database \citep{Cadestinetal2018} and \citet{MiroudotYe2020} separate value added of foreign affiliates from that of domestic firms.
+Extended supply--use tables for the United States \citep{Fetzeretal2018} and the Netherlands \citep{Chongetal2019}, codified in \citet{UN2023GVC}, provide the compilation template we follow.
+\citet{Lipsey2010} and \citet{CasellaBorgaWacker2023} warn that when intangibles and conduit FDI dominate, neither location nor immediate ownership identifies where production income accrues.
+The ownership-split tables stop at foreign-\emph{controlled} value added.
+They do not ask how much of it leaves the country, as distributed or reinvested earnings, or whether it only passes through on its way to a third country.
+
+The third literature works from the residence side.
+The SNA, BPM6 and the FDI benchmark definition \citep{UN2009SNA,IMF2009BPM6,OECD2008BMD} define the primary-income flows that bridge GDP and GNI.
+\citet{Rassier2017} and \citet{Guvenenetal2022} show that profit shifting by multinationals distorts output, BoP and productivity by location.
+Ireland's modified GNI* \citep{ESRG2016,FitzGerald2018} is the leading official response, but it is a single adjusted aggregate.
+It does not decompose the leakage by sector or by recipient.
+Our requirement that every euro of GDP be allocated to exactly one recipient is the cross-border counterpart of the distributional national accounts of \citet{PikettySaezZucman2018}.
+
+Measuring these flows correctly requires dealing with special-purpose entities.
+Investment-income flows are the counterpart of external positions \citep{LaneMilesiFerretti2018}, and those positions are heavily distorted by conduits.
+\citet{DamgaardElkjaer2017} and \citet{DamgaardElkjaerJohannesen2024} estimate that a large share of global FDI is ``phantom'' investment in shell entities, and \citet{Casella2019} proposes a probabilistic look-through to ultimate investors.
+\citet{BlanchardAcalin2016} and \citet{BolwijnCasellaRigo2018} show that hub FDI is largely pass-through.
+\citet{Zucman2013} and \citet{Coppolaetal2021} demonstrate that restating external positions from residence to nationality changes bilateral patterns substantially.
+Cyprus appears on the haven lists used to estimate shifted profits \citep{HinesRice1994,TorslovWierZucman2023}.
+Related work quantifies profit shifting from FDI returns \citep{JanskyPalansky2019} and traces its footprint in the balance of payments \citep{HebousKlemmWu2021}.
+Network studies of corporate control \citep{Vitalietal2011} classify Cyprus as a sink offshore financial centre \citep{GarciaBernardoetal2017}.
+Russian round-tripping through Cyprus is documented by \citet{Ledyaevaetal2015} and \citet{RepousisLoisKougioumtsidis2019}, and IMF surveillance repeatedly flags the SPE-driven volatility of Cyprus's external accounts \citep{IMF2023CyprusSI,IMF2024Cyprus}.
+We follow the IMF definition of SPEs \citep{SanchezMunozetal2022}, as applied by the Central Bank of Cyprus \citep{CBC2026External}, and use Eurostat's SPE split of FDI income together with a resident-sector rule.
+This removes pass-through flows explicitly, instead of counting them either as domestic retention or as foreign capture.
+
+Finally, for a tourism-intensive economy, the older tourism-leakage literature \citep{Sinclair1998} and recent work on platform intermediation \citep{RochetTirole2003,Hunoldetal2020,UNCTAD2019DER} point to a further channel.
+A commission paid to a foreign-owned platform is often read as value captured abroad, but only the platform owner's share of profit is; the rest pays local staff, suppliers and taxes.
+The accounting gives each part an explicit recipient.
+
+Relative to these literatures, our contribution is integration rather than a new estimator.
+We join the residence, ownership and value-chain layers into a single recipient-country by sector tensor.
+The tensor adds up to GDP, is consistent with BPM6 primary income and FATS ownership, excludes double counting between imported-input leakage and foreign capital-income leakage, and is adjusted for SPEs.
+Every cell is traceable to a published source.

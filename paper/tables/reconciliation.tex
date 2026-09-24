@@ -1,0 +1,19 @@
+\begin{table}[h]
+\centering
+\small
+\caption{Reconciliation with official aggregates}
+\label{tab:recon}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.5\textwidth}lrrc}
+\toprule
+Check & Years & Max $|$diff.$|$ \% & Tol. \% & Pass \\
+\midrule
+Compensation of employees (SIOT vs sector accounts S1 D1 paid) & 2010--2022 & 0.0001 & 0.50 & \checkmark \\
+GDP = sum of GVA + taxes less subsidies on products & 2010--2022 & 0.0002 & 0.50 & \checkmark \\
+GNI = GDP + primary income received - primary income paid (rest of world) & 2010--2024 & 0.0077 & 0.10 & \checkmark \\
+Recipient tensor sums to GDP & 2010--2023 & 0.0005 & 0.50 & \checkmark \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+\begin{minipage}{0.9\textwidth}\footnotesize Notes: official values from CYSTAT annual national accounts (April 2026 vintage) and sector accounts; model values from the input--output tables and the recipient accounting. Residuals are reported, not forced to zero.\end{minipage}
+\end{table}

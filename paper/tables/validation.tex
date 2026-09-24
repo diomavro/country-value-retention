@@ -1,0 +1,44 @@
+The validation suite (\texttt{python -m cvr.validate}) runs after every model build and exits with an error if any check fails. In this release 30 of 30 checks pass; unit tests add further guards on synthetic data.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Automated validation checks}
+\label{tab:validation}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.75\textwidth}c}
+\toprule
+Check & Pass \\
+\midrule
+{}[identity] tensor sums to GDP every year & \checkmark \\
+{}[identity] industry rows sum to GVA (all years) & \checkmark \\
+{}no negative outflows & \checkmark \\
+{}no negative unexplained retained flows & \checkmark \\
+{}[identity] DVR + FVL = 1 & \checkmark \\
+{}0 <= FVL <= 1 & \checkmark \\
+{}[identity] Frame B: each euro sums to 1 & \checkmark \\
+{}[identity] Frame B: domestic VA of all final demand = GVA & \checkmark \\
+{}Frame B: imported inputs counted once (= total imported intermediates) & \checkmark \\
+{}IO: VA + import + tax content = 1 (every product, every year) & \checkmark \\
+{}IO: direct import share within [0,1] & \checkmark \\
+{}ownership: no duplicate edges, shares <= 100\% & \checkmark \\
+{}ownership: ultimate shares sum to 100\% per firm & \checkmark \\
+{}reconciliation: all checks within tolerance & \checkmark \\
+{}provenance complete on all tables & \checkmark \\
+{}intra-group interest only on industries with foreign-controlled surplus & \checkmark \\
+{}source: creditor share = firms' and banks' interest abroad / S11 NOS & \checkmark \\
+{}fitted-cell flag and low confidence exactly where the FATS cell is suppressed & \checkmark \\
+{}source: banks' interest = max(BoP paid - received, 0) & \checkmark \\
+{}source: households' loan interest on imputed rent = their D41 share x S1V loan interest & \checkmark \\
+{}source: every FATS row = base x (1 - CFC - interest) x (1 - tau) x theta (raw S11/S12 ratios) & \checkmark \\
+{}theta used = theta recalibrated from the company layer & \checkmark \\
+{}source: intra-group interest = min(BoP FDI debt interest, s x interest deducted) & \checkmark \\
+{}source: non-resident pay = S2 D1 x (1 - employer SSC share) & \checkmark \\
+{}source: EU taxes = S2 D2 & \checkmark \\
+{}source: public-debt interest = BoP S13 interest paid & \checkmark \\
+{}source: FATS base of foreign-owned profit = published FATS total (less losses) & \checkmark \\
+{}source: foreign-owned banks counted once (BoP before 2021, FATS K from 2021) & \checkmark \\
+{}bridge: official lines add up to official outflow; model lines to model outflow & \checkmark \\
+{}time-series breaks identified and documented & \checkmark \\
+\bottomrule
+\end{tabular}
+\end{table}

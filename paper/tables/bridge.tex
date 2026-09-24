@@ -1,0 +1,27 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\caption{From the official outflow to this study's estimate, 2023 (EUR m)}
+\label{tab:bridge}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.34\textwidth}rr>{\raggedright\arraybackslash}p{0.40\textwidth}}
+\toprule
+Line (resident sector paying) & Official & This study & Reason for the difference \\
+\midrule
+1 Compensation of employees paid (S2 D1) & 230 & 182 & model is net of Cypriot employer social contributions \\
+2 Taxes on production to EU institutions (S2 D2) & 74 & 74 & identical \\
+3 Property income: NA (S2 D4) minus BoP total (S1) & 0 & 0 & vintage/compilation gap between national accounts and BoP \\
+4 Non-bank financial corporations incl. SPEs (S12M) & 29,224 & 174 & excluded as pass-through, except the FATS profit of foreign-owned insurers and auxiliary financial firms (from 2021) \\
+5 Central bank (S121) & 0 & 0 & excluded: reserve management \\
+6 Banks (S122) & 1,500 & 640 & model: foreign-owned finance profit (FATS K from 2021; BoP bank FDI equity income before) + banks' interest net of receipts \\
+7 General government (S13) & 197 & 197 & identical (interest items) \\
+8a Firms and households: FDI equity income (S1V) & 2,633 & 610 & model uses FATS (production-based): the difference is income passed on by non-SPE holding and trading companies, plus FATS/BPM6 concept differences \\
+8b Firms and households: FDI debt interest (S1V) & 572 & 145 & model caps intra-group interest at the interest deducted from foreign-controlled firms' surplus \\
+8c Firms and households: other interest and portfolio income (S1V) & 457 & 456 & identical where published; confidential items omitted (lower bound) \\
+Total & 34,887 & 2,478 & official primary income paid vs this study's outflow \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+\begin{minipage}{0.95\textwidth}\footnotesize Notes: official = CYSTAT rest-of-world account (D1, D2, D4 received by the rest of the world) and the balance of payments by paying resident sector (Eurostat bop\_c6\_a). The official lines add up to the official total in every year 2010--2023; the full series is in \texttt{data/processed/bridge.parquet}.\end{minipage}
+\end{table}

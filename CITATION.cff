@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software or data, please cite it as below."
+title: "country-value-retention: an auditable recipient-country accounting of domestic value retention and foreign leakage"
+version: 0.1.0
+date-released: 2026-09-24
+license: MIT
+repository-code: "https://github.com/diomavro/country-value-retention"
+authors:
+  - family-names: Mavroyiannis
+    given-names: Diomides
+    affiliation: "Milestone Institute, Budapest"
+    email: dmavroyiannis8@gmail.com
+keywords:
+  - national accounts
+  - value added
+  - foreign direct investment
+  - special purpose entities
+  - input-output
+  - Cyprus

@@ -1,0 +1,18 @@
+Every dataset is listed in \texttt{data\_catalogue.csv} with provider, URL, reference period, publication and download dates, licence, scope, resolution, variables, processing script and SHA-256 checksum. Raw files are not redistributed; \texttt{make ingest} downloads them again, and checksums confirm that the same vintage is used.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Datasets in the catalogue by provider}
+\label{tab:catalogue}
+\begin{tabular}{lr}
+\toprule
+Provider & Datasets \\
+\midrule
+CYSTAT (Statistical Service of Cyprus) & 43 \\
+Central Bank of Cyprus & 8 \\
+Compiled from company filings (Tier 1-4, per row) & 1 \\
+Eurostat & 44 \\
+\bottomrule
+\end{tabular}
+\end{table}
