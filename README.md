@@ -2,6 +2,8 @@
 
 **Who captures the value generated inside a country?**
 
+**Dashboard:** https://diomavro.github.io/country-value-retention/
+
 This is an open, auditable accounting system. For every euro of value added
 produced in a country, it records who ultimately receives it: resident workers,
 the state, resident owners, or foreign workers, owners, lenders and EU
