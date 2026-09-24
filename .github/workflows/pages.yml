@@ -36,6 +36,8 @@ jobs:
         run: npm run build
         env:
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+      - name: Check internal links and data files
+        run: python3 scripts/check_links.py --base /${{ github.event.repository.name }}
       - run: touch out/.nojekyll  # serve the _next/ folder as-is
       - uses: actions/upload-pages-artifact@v3
         with:

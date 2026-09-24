@@ -55,6 +55,7 @@ def _load_all() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]
     """(entities, economic edges, edges without a usable share, control edges)."""
     e = pd.read_csv(RAW / "entities.csv")
     d = pd.read_csv(RAW / "ownership_edges.csv")
+    d["share_pct"] = pd.to_numeric(d["share_pct"], errors="coerce").astype(float)
     e = e.rename(columns={"country_of_incorporation": "country"})
     e["country"] = e["country"].fillna(UNRESOLVED)
     e["is_terminal"] = e["sector"].isin(TERMINAL_SECTORS)
