@@ -6,7 +6,7 @@
 
 Diomides Mavroyiannis (Milestone Institute, Budapest) — data release v0.1, September 2026
 
-**Abstract.** In official statistics Cyprus pays abroad primary income—wages, profits, interest and dividends—worth between 67% and 172% of its GDP each year. Most of it is income that only passes through Cypriot holding companies. We ask a narrower question: of the value produced in Cyprus, how much accrues to residents, how much to the rest of the world, and to whom? We split every euro of GDP by recipient and industry, combining CYSTAT’s supply–use and input–output tables, statistics on foreign-controlled firms (FATS), the balance of payments by paying sector, and a hand-built ownership graph. In 2023 at most 92.4% of Cypriot GDP accrued to residents (for the central foreign equity share); 7.6% ( bn) accrued abroad, 57% of it as profits of foreign-owned firms. Retention ranged from 92.4% to 95.8% over 2010–2023 and has fallen since 2020. A sector-by-sector bridge accounts for the difference from the official outflow. Separately, the import content of final demand for Cypriot output rose from 21.4% to 40.7% between 2010 and 2022.
+**Abstract.** In official statistics Cyprus pays abroad primary income—wages, profits, interest and dividends—worth between 67% and 172% of its GDP each year. Most of it is income that only passes through Cypriot holding companies. We ask a narrower question: of the value produced in Cyprus, how much accrues to residents, how much to the rest of the world, and to whom? We split every euro of GDP by recipient and industry, combining CYSTAT’s supply–use and input–output tables, statistics on foreign-controlled firms (FATS), the balance of payments by paying sector, and a hand-built ownership graph. In 2023 at most 92.9% of Cypriot GDP accrued to residents (for the central foreign equity share); 7.1% (EUR 2.30 bn) accrued abroad, 54% of it as profits of foreign-owned firms. Retention ranged from 92.9% to 95.8% over 2010–2023 and has fallen since 2020. A sector-by-sector bridge accounts for the difference from the official outflow. Separately, the import content of final demand for Cypriot output rose from 21.4% to 40.7% between 2010 and 2022.
 
 **Keywords:** national accounts; value added; foreign direct investment; special purpose entities; input–output; ownership networks; Cyprus.\
 **JEL:** E01, F23, F62, C67, O52.
@@ -23,7 +23,7 @@ We therefore build the accounting from the production side. We start from GDP by
 
 #### Findings.
 
-At most 92.4% of Cyprus’s 2023 GDP accrued to residents. Given the central assumptions (Section 11), it is an upper bound because any outflow the statistics miss is counted as retained. The remaining 7.6% (EUR 2.48 bn) accrued abroad: EUR 1,424 m as profits of foreign-owned firms, EUR 454 m as interest paid by firms and households to other foreign lenders (banks’ interest paid abroad was smaller than their receipts), EUR 145 m as interest paid to foreign parent companies, EUR 197 m as interest on public debt, EUR 182 m as pay to non-resident workers, and EUR 74 m as customs duties passed to the EU. These are *accruals*: profits that foreign owners reinvest in Cyprus still accrue to them, as in the balance of payments. Retention ranged between 92.4% (2023) and 95.8% (2020). It fell from 95.8% in 2020 to 92.4% in 2023 as the surplus of foreign-controlled firms grew. The largest identified recipients in 2023 were Greece (EUR 336 m), Offshore financial centres (EUR 270 m), United States (EUR 152 m) and Canada (EUR 137 m). The countries are those of the ultimate controller of the paying firm. 44% of the outflow cannot be assigned to a country because the statistics are confidential or published only as world totals; we report it as such.
+At most 92.9% of Cyprus’s 2023 GDP accrued to residents. Given the central assumptions (Section 11), it is an upper bound because any outflow the statistics miss is counted as retained. The remaining 7.1% (EUR 2.30 bn) accrued abroad: EUR 1,246 m as profits of foreign-owned firms, EUR 454 m as interest paid by firms and households to other foreign lenders (banks’ interest paid abroad was smaller than their receipts), EUR 145 m as interest paid to foreign parent companies, EUR 197 m as interest on public debt, EUR 182 m as pay to non-resident workers, and EUR 74 m as customs duties passed to the EU. These are *accruals*: profits that foreign owners reinvest in Cyprus still accrue to them, as in the balance of payments. Retention ranged between 92.9% (2023) and 95.8% (2020). It fell from 95.8% in 2020 to 92.9% in 2023 as the surplus of foreign-controlled firms grew. The largest identified recipients in 2023 were Greece (EUR 275 m), Offshore financial centres (EUR 250 m), United States (EUR 131 m) and Canada (EUR 109 m). The countries are those of the ultimate controller of the paying firm. 46% of the outflow cannot be assigned to a country because the statistics are confidential or published only as world totals; we report it as such.
 
 Imports are a separate channel and are not part of GDP. Between 2010 and 2022, imported intermediate inputs grew from EUR 4.8 bn to EUR 18.7 bn. IT services, banking, auxiliary financial services and publishing account for EUR 8.7 bn of the EUR 13.9 bn increase. The import content of final demand for Cypriot output, counting suppliers’ suppliers, rose from 21.4% to 40.7%.
 
@@ -108,7 +108,7 @@ Relative to these literatures, our contribution is integration rather than a new
 
 # Data
 
-All inputs are official statistics, downloaded by scripts and logged with URL, retrieval date and SHA-256 checksum in a catalogue of 96 datasets (Appendix 15). Processing stops if a raw file no longer matches its checksum. Table 1 lists the core sources.
+All inputs are official statistics, downloaded by scripts and logged with URL, retrieval date and SHA-256 checksum in a catalogue of 96 datasets (Appendix 16). Processing stops if a raw file no longer matches its checksum. Table 1 lists the core sources.
 
 <div id="tab:sources">
 
@@ -128,11 +128,11 @@ Core data sources
 
 <div class="minipage">
 
-Notes: confidential cells (22–26% of FATS and FDI income cells) are kept as missing, never set to zero. Where a missing BoP cell leaves a flow unmeasured, the estimate is a lower bound on that flow and the omission is reported. Full catalogue in `data_catalogue.csv`.
+Notes: confidential cells (14%–23% of FATS cells, 27% of FDI income cells up to 2023) are kept as missing, never set to zero. Where a missing BoP cell leaves a flow unmeasured, the estimate is a lower bound on that flow and the omission is reported. Full catalogue in `data_catalogue.csv`.
 
 </div>
 
-Two features of the data shape the method. First, the input–output tables are complete. The symmetric tables contain no confidential cells and reconcile exactly to GDP and compensation in every year (Appendix 16). Second, the balance of payments is dominated by pass-through. In 2023, FDI income paid abroad was EUR 30.7 bn. Excluding SPEs, as Eurostat publishes them, it was EUR 6.2 bn (19.0% of GDP). Even that exceeds the operating surplus of all foreign-controlled firms in FATS (EUR 2.76 bn), because holding and trading companies with staff are not SPEs but still pass on foreign-earned income. We therefore measure foreign-owned profit from the production side (FATS) and use the payments side as a comparator, bridged line by line in Section 7.
+Two features of the data shape the method. First, the input–output tables are complete. The symmetric tables contain no confidential cells and reconcile exactly to GDP and compensation in every year (Appendix 17). Second, the balance of payments is dominated by pass-through. In 2023, FDI income paid abroad was EUR 30.7 bn. Excluding SPEs, as Eurostat publishes them, it was EUR 6.2 bn (19.0% of GDP). Even that exceeds the operating surplus of all foreign-controlled firms in FATS (EUR 2.76 bn; EUR 2.51 bn with finance at the national-accounts level), because holding and trading companies with staff are not SPEs but still pass on foreign-earned income. We therefore measure foreign-owned profit from the production side (FATS) and use the payments side as a comparator, bridged line by line in Section 7.
 
 # Methodology
 
@@ -149,14 +149,14 @@ and the pipeline stops if either bound is violated. Retained value is the residu
 
 #### Profits of foreign-owned firms.
 
-FATS reports gross operating surplus of foreign-controlled firms, before depreciation, interest and tax. We use the finest published FATS code for each industry: for example publishing (J58) or IT services (J62–J63), and before 2021 every 2-digit division. Only a section’s unpublished remainder is split across its industries in proportion to operating surplus. We then deduct depreciation ($`c`$) and interest paid ($`\rho`$), both per euro of gross operating surplus of non-financial corporations. We use corporate ratios, not industry ratios, because industry surplus also includes the income of the self-employed. For $`\rho`$ we use the interest non-financial corporations pay, after the national-accounts adjustment for bank services (FISIM), per euro of their surplus. We do not net interest received: receipts from abroad are not value generated in Cyprus, and netting would credit them to foreign owners. Actual interest before the FISIM adjustment is much higher in the post-crisis years, because domestic firms were heavily indebted: applied to all foreign-controlled firms it would leave them no or almost no profit in 2010–2015 and 11–29% of surplus in 2016–2020 (in 2021–2023 it is close to, and in 2023 below, the central ratio). We report it, the net-of-receipts version and $`\rho=0`$ as variants (Section 11); the year-by-year ratios are in Appendix 16. We apply the statutory corporate tax rate $`\tau_t`$ and multiply by $`\theta`$, the non-resident share of equity:
+FATS reports gross operating surplus of foreign-controlled firms, before depreciation, interest and tax. We use the finest published FATS code for each industry: for example publishing (J58) or IT services (J62–J63), and before 2021 every 2-digit division. Only a section’s unpublished remainder is split across its industries in proportion to operating surplus. We then deduct depreciation ($`c`$) and interest paid ($`\rho`$), both per euro of gross operating surplus of non-financial corporations. We use corporate ratios, not industry ratios, because industry surplus also includes the income of the self-employed. For $`\rho`$ we use the interest non-financial corporations pay, after the national-accounts adjustment for bank services (FISIM), per euro of their surplus. We do not net interest received: receipts from abroad are not value generated in Cyprus, and netting would credit them to foreign owners. Actual interest before the FISIM adjustment is much higher in the post-crisis years, because domestic firms were heavily indebted: applied to all foreign-controlled firms it would leave them no or almost no profit in 2010–2015 and 11–29% of surplus in 2016–2020 (in 2021–2023 it is close to, and in 2023 below, the central ratio). We report it, the net-of-receipts version and $`\rho=0`$ as variants (Section 11); the year-by-year ratios are in Appendix 17. We apply the statutory corporate tax rate $`\tau_t`$ and multiply by $`\theta`$, the non-resident share of equity:
 ``` math
 \begin{equation}
 O^{\text{FDI}}_{jk} = \text{GOS}^{\text{FATS}}_{k}\,(1-c-\rho)\,(1-\tau_t)\,\theta\,\sigma_{s(k),j}.
 \label{eq:fdi}
 \end{equation}
 ```
-On this basis $`\rho`$ was 34% in 2010 and 27% in 2023. For finance, $`\rho=0`$, because interest is the core business. $`\tau_t`$ is 10% to 2012 and 12.5% from 2013. Effective rates are lower, so the no-tax case is reported as a bound (Section 11). The recipient share $`\sigma_{s,j}`$ is fitted section by section. FATS publishes some section $`\times`$ country cells; these are held fixed, and the unpublished cells are fitted so that rows add to section totals and columns to the published country totals (iterative proportional fitting). Countries that Eurostat suppresses remain in a “confidential” category: we do not model values for suppressed cells, which could otherwise be backed out from published totals. Before 2021 FATS excludes finance, so profits of foreign-owned banks enter through the balance of payments. These are FDI equity income paid by deposit-taking corporations, which is already after interest and tax. Foreign-owned insurers and auxiliary financial firms are not covered before 2021 (Section 12).
+On this basis $`\rho`$ was 34% in 2010 and 27% in 2023. For finance, $`\rho=0`$, because interest is the core business. $`\tau_t`$ is 10% to 2012 and 12.5% from 2013. Effective rates are lower, so the no-tax case is reported as a bound (Section 11). The recipient share $`\sigma_{s,j}`$ is fitted section by section. From 2021, when FATS covers finance, its operating surplus of all financial firms can exceed what the national accounts record for finance; in financial centres business statistics can include income of holding and fund structures. Where it does, we keep the FATS foreign-controlled share of finance, and of each country within it, and take the level from the national accounts. We apply this to finance only: in other sections FATS and the national accounts differ by definition (before 2021 FATS surplus is value added minus personnel costs), for Cyprus in both directions, and a one-sided cut would bias foreign profit down. FATS publishes some section $`\times`$ country cells; these are held fixed, and the unpublished cells are fitted so that rows add to section totals and columns to the published country totals (iterative proportional fitting). Countries that Eurostat suppresses remain in a “confidential” category: we do not model values for suppressed cells, which could otherwise be backed out from published totals. Before 2021 FATS excludes finance, so profits of foreign-owned banks enter through the balance of payments. These are FDI equity income paid by deposit-taking corporations, which is already after interest and tax. Foreign-owned insurers and auxiliary financial firms are not covered before 2021 (Section 13).
 
 #### The foreign equity share $`\theta`$.
 
@@ -190,7 +190,7 @@ Entities and ownership links form a directed graph, and each link records its sh
 
 ## Checks
 
-Two kinds of automated checks run after every build (Appendix 16). *Identities* hold by construction, such as the accounting summing to GDP. *Source checks* recompute each outflow from its own raw source and fail if a flow is dropped, doubled or mis-scaled. Pay to non-resident workers must equal the rest-of-world D1 net of employers’ contributions. The FATS base of foreign-owned profit must equal the published FATS total. Foreign-owned banks must be counted exactly once. The bridge of Section 7 must close. Unit tests pin the rules that revenue never enters, and that wages and taxes can never be booked as foreign capital income. They also forbid counting any flow or ownership link twice, and forbid listing aggregate partner codes such as the euro area beside their members.
+Two kinds of automated checks run after every build (Appendix 17). *Identities* hold by construction, such as the accounting summing to GDP. *Source checks* recompute each outflow from its own raw source and fail if a flow is dropped, doubled or mis-scaled. Pay to non-resident workers must equal the rest-of-world D1 net of employers’ contributions. The FATS base of foreign-owned profit must equal the published FATS total, less any amount above the national-accounts level. Foreign-owned banks must be counted exactly once. The bridge of Section 7 must close. Unit tests pin the rules that revenue never enters, and that wages and taxes can never be booked as foreign capital income. They also forbid counting any flow or ownership link twice, and forbid listing aggregate partner codes such as the euro area beside their members.
 
 # Results: how much does Cyprus retain?
 
@@ -199,14 +199,14 @@ Two kinds of automated checks run after every build (Appendix 16). *Identities* 
 <figcaption>Official primary income paid abroad versus income from Cypriot production accruing abroad, % of GDP. The SPE-excluded FDI series starts in 2013 and has gaps where Eurostat marks cells confidential (2013–2014, 2016).</figcaption>
 </figure>
 
-Figure 1 shows the central result. The official outflow—every euro of primary income paid to non-residents, including pass-through—moves between 67% and 172% of GDP. FDI income paid excluding SPEs is far smaller but still volatile. Income generated by Cypriot production that accrues abroad lies between 4.2% and 7.6% of GDP, and has risen since 2020.
+Figure 1 shows the central result. The official outflow—every euro of primary income paid to non-residents, including pass-through—moves between 67% and 172% of GDP. FDI income paid excluding SPEs is far smaller but still volatile. Income generated by Cypriot production that accrues abroad lies between 4.2% and 7.1% of GDP, and has risen since 2020.
 
 <figure id="fig:mech" data-latex-placement="!htbp">
 <embed src="figures/mechanisms.pdf" />
 <figcaption>Value accruing abroad by mechanism, EUR million.</figcaption>
 </figure>
 
-Figure 2 decomposes the outflow. Profits of foreign-owned firms are the largest mechanism (57% in 2023), and they drive the increase after 2020. Pay to non-resident workers is small: 1.3% of compensation after employers’ contributions. Interest paid abroad on public debt peaked at EUR 284 m in 2016, fell to EUR 141 m in 2022 and rose to EUR 197 m in 2023. The 2021 step coincides with FATS adding finance and sections P–R. With the same sections (B–N) in every year and banks from the balance of payments, retention in 2023 is 91.6%.
+Figure 2 decomposes the outflow. Profits of foreign-owned firms are the largest mechanism (54% in 2023), and they drive the increase after 2020. Pay to non-resident workers is small: 1.3% of compensation after employers’ contributions. Interest paid abroad on public debt peaked at EUR 284 m in 2016, fell to EUR 141 m in 2022 and rose to EUR 197 m in 2023. The 2021 step coincides with FATS adding finance and sections P–R. With the same sections (B–N) in every year and banks from the balance of payments, retention in 2023 is 91.6%.
 
 Two ratios summarise capital, both relative to the net operating surplus of all non-financial corporations, before interest and tax; the foreign-controlled numerator covers the same FATS sections (B–N) in every year. Foreign-controlled firms, weighted by their non-resident equity share, account for 22.0% of it in 2023 (8.5% in 2010). Because it is measured before interest, this share includes what those firms owe their lenders. Part of its rise coincides with the 2021 switch of the FATS dataset, which roughly doubled measured foreign-controlled surplus in section J. Interest and portfolio income that firms and banks paid to foreign lenders was equal in size to 7.6% of the same surplus; the two ratios overlap and are not added. These ratios have different bases from retention and are not added to it.
 
@@ -219,14 +219,14 @@ Two ratios summarise capital, both relative to the net operating surplus of all 
 | Compensation of employees paid (S2 D1) | 230 | 182 | model is net of Cypriot employer social contributions |
 | Taxes on production to EU institutions (S2 D2) | 74 | 74 | identical |
 | Property income: NA (S2 D4) minus BoP total (S1) | 0 | 0 | vintage/compilation gap between national accounts and BoP |
-| Non-bank financial corporations incl. SPEs (S12M) | 29,224 | 174 | excluded as pass-through, except the FATS profit of foreign-owned insurers and auxiliary financial firms (from 2021) |
+| Non-bank financial corporations incl. SPEs (S12M) | 29,224 | 136 | excluded as pass-through, except the FATS profit of foreign-owned insurers and auxiliary financial firms (from 2021) |
 | Central bank (S121) | 0 | 0 | excluded: reserve management |
-| Banks (S122) | 1,500 | 640 | model: foreign-owned finance profit (FATS K from 2021; BoP bank FDI equity income before) + banks’ interest net of receipts |
+| Banks (S122) | 1,500 | 500 | model: foreign-owned finance profit (FATS K from 2021; BoP bank FDI equity income before) + banks’ interest net of receipts |
 | General government (S13) | 197 | 197 | identical (interest items) |
 | 8a Firms and households: FDI equity income (S1V) | 2,633 | 610 | model uses FATS (production-based): the difference is income passed on by non-SPE holding and trading companies, plus FATS/BPM6 concept differences |
 | 8b Firms and households: FDI debt interest (S1V) | 572 | 145 | model caps intra-group interest at the interest deducted from foreign-controlled firms’ surplus |
 | 8c Firms and households: other interest and portfolio income (S1V) | 457 | 456 | identical where published; confidential items omitted (lower bound) |
-| Total | 34,887 | 2,478 | official primary income paid vs this study’s outflow |
+| Total | 34,887 | 2,299 | official primary income paid vs this study’s outflow |
 
 From the official outflow to this study’s estimate, 2023 (EUR m)
 
@@ -240,7 +240,7 @@ Notes: official = CYSTAT rest-of-world account (D1, D2, D4 received by the rest 
 
 Table 2 bridges the official outflow to our estimate by paying sector. The largest line is income paid by non-bank financial corporations: EUR 29.2 bn in 2023, almost all of it pass-through. The second is FDI equity income paid by firms and households. The balance of payments records EUR 2.63 bn, while the FATS-based profit of foreign-controlled non-financial firms is EUR 0.61 bn. The EUR 2.02 bn difference is income that holding and trading companies with staff receive from abroad and pass on, plus differences between the FATS and balance-of-payments concepts. Our data cannot split these two components. This line, not the SPE rule, explains most of the distance between the official figure and ours outside S12M.
 
-Banks show the largest disagreement between two official sources. In 2023 the balance of payments records FDI equity income paid by banks of EUR 1,198 m, almost all of it reinvested earnings. Our FATS-based profit of foreign-owned banks is EUR 640 m, although the balance-of-payments figure is already after interest and tax and should, if anything, be smaller. The two sources agree in 2021 and 2022 (within EUR 61m) and diverge only in 2023, when bank profits jumped. Our EUR 640 m is the banks’ share of FATS finance, which is published only as a whole; against all of finance the observed gap is smaller but still large. Three explanations are possible, and published data cannot separate them; the timing fits best a large bank that the two sources classify differently. FATS may treat Bank of Cyprus as domestically controlled, while the balance of payments treats all its profit as income of its Irish holding company. The balance of payments also includes 10–50% stakes, which FATS does not. And the two sources may record provisions differently. The central estimate uses FATS, the same source as every other industry, from 2021, and the balance of payments before 2021, when FATS does not cover finance: the series splices two sources that disagree in 2023. The consistent-scope series (91.6% retention in 2023) uses the balance of payments throughout, and shows the same post-2020 decline.
+Banks show the largest disagreement between two official sources. In 2023 the balance of payments records FDI equity income paid by banks of EUR 1,198 m, almost all of it reinvested earnings. Our FATS-based profit of foreign-owned banks is EUR 500 m, although the balance-of-payments figure is already after interest and tax and should, if anything, be smaller. The two sources agree in 2021 and 2022 (within EUR 52 m) and diverge only in 2023, when bank profits jumped. Our EUR 500 m is the banks’ share of FATS finance, which is published only as a whole; against all of finance the observed gap is smaller but still large. Three explanations are possible, and published data cannot separate them; the timing fits best a large bank that the two sources classify differently. FATS may treat Bank of Cyprus as domestically controlled, while the balance of payments treats all its profit as income of its Irish holding company. The balance of payments also includes 10–50% stakes, which FATS does not. And the two sources may record provisions differently. The central estimate uses FATS, the same source as every other industry, from 2021, and the balance of payments before 2021, when FATS does not cover finance: the series splices two sources that disagree in 2023. The consistent-scope series (91.6% retention in 2023) uses the balance of payments throughout, and shows the same post-2020 decline.
 
 # Industry decomposition
 
@@ -286,7 +286,7 @@ Banks show the largest disagreement between two official sources. In 2023 the ba
 <td style="text-align: right;">56.2</td>
 <td style="text-align: right;">48.2</td>
 <td style="text-align: right;">–</td>
-<td style="text-align: right;">68.5</td>
+<td style="text-align: right;">75.3</td>
 </tr>
 <tr>
 <td style="text-align: left;">Insurance</td>
@@ -294,7 +294,7 @@ Banks show the largest disagreement between two official sources. In 2023 the ba
 <td style="text-align: right;">51.5</td>
 <td style="text-align: right;">44.8</td>
 <td style="text-align: right;">–</td>
-<td style="text-align: right;">80.5</td>
+<td style="text-align: right;">84.6</td>
 </tr>
 <tr>
 <td style="text-align: left;">Telecommunications</td>
@@ -310,7 +310,7 @@ Banks show the largest disagreement between two official sources. In 2023 the ba
 <td style="text-align: right;">49.7</td>
 <td style="text-align: right;">48.6</td>
 <td style="text-align: right;">–</td>
-<td style="text-align: right;">97.7</td>
+<td style="text-align: right;">96.9</td>
 </tr>
 <tr>
 <td style="text-align: left;">Land transport</td>
@@ -382,7 +382,7 @@ Banks show the largest disagreement between two official sources. In 2023 the ba
 <td style="text-align: right;">81.3</td>
 <td style="text-align: right;">67.8</td>
 <td style="text-align: right;">–</td>
-<td style="text-align: right;">78.7</td>
+<td style="text-align: right;">83.2</td>
 </tr>
 <tr>
 <td style="text-align: left;">Wholesale trade</td>
@@ -403,7 +403,7 @@ Notes: percentages. Direct foreign input exposure = imported share of the indust
 
 </div>
 
-Table 3 reports, for industries of policy interest and the largest ones, their GVA, foreign input exposure, foreign ownership capture and retention. In 2023 the largest outflows came from Banking (EUR 653 m; retention 68.5%) and Publishing (incl. software) (EUR 227 m; 79.8%). Public administration and education retain close to 100%: they have little or no operating surplus to pay abroad. FATS publishes finance only as a whole, so foreign-owned profit in finance is split between banking, insurance and auxiliary services in proportion to their operating surplus; the split is an allocation, not an observation. Publishing (including software) and IT services are activities where intellectual property matters. Their measured surplus may partly be profit shifted into Cyprus by multinational groups (Guvenen et al. 2022). Conversely, intra-group service imports can move profit out as intermediate consumption, which Frame A cannot see. For these industries “value generated by production” is an accounting label, not a statement about where the underlying activity takes place.
+Table 3 reports, for industries of policy interest and the largest ones, their GVA, foreign input exposure, foreign ownership capture and retention. In 2023 the largest outflows came from Banking (EUR 512 m; retention 75.3%) and Publishing (incl. software) (EUR 227 m; 79.8%). Public administration retains almost all of its value added: it has little operating surplus to pay abroad. FATS publishes finance only as a whole, so foreign-owned profit in finance is split between banking, insurance and auxiliary services in proportion to their operating surplus; the split is an allocation, not an observation. Publishing (including software) and IT services are activities where intellectual property matters. Their measured surplus may partly be profit shifted into Cyprus by multinational groups (Guvenen et al. 2022). Conversely, intra-group service imports can move profit out as intermediate consumption, which Frame A cannot see. For these industries “value generated by production” is an accounting label, not a statement about where the underlying activity takes place.
 
 # Country decomposition
 
@@ -412,7 +412,7 @@ Table 3 reports, for industries of policy interest and the largest ones, their G
 <figcaption>Recipients of value generated in Cyprus, 2023, EUR million, by ultimate controlling economy of the paying firm. Grey: country not published.</figcaption>
 </figure>
 
-Figure 3 answers the question “to whom?”. The country is that of the ultimate controlling unit of the paying firm. For a listed parent, that is the parent’s country, even though its shareholders may live anywhere. Among identified recipients, Greece (EUR 336 m) and Offshore financial centres (EUR 270 m) lead, followed by United States, Canada and France. “Offshore financial centres” is Eurostat’s aggregate of offshore financial jurisdictions; it also contains operating economies such as Hong Kong, which we count only once, inside the aggregate. When FATS names them as ultimate controller, the chain stops there; statistics cannot see who stands behind an offshore vehicle. This is one reason why Russia, often discussed as a large investor in Cyprus, appears small as an ultimate controller of *producing* firms. Ireland does not appear although the holding company of Bank of Cyprus is incorporated there. FATS does not publish Ireland as an ultimate controlling economy in these years; whether it treats the bank as Irish-controlled (and suppresses the cell) or looks through the redomiciled holding to domestic control cannot be told from published data. We never assign a suppressed economy’s total to a named country. Within a country’s published total, however, the split across sections is fitted where the section cell is suppressed; those rows are flagged as fitted and carry low confidence. EUR 1,083 m (44%) cannot be assigned. EUR 285 m is suppressed for confidentiality, and EUR 798 m is interest paid by firms, households and the government that the balance of payments publishes only as a world total.
+Figure 3 answers the question “to whom?”. The country is that of the ultimate controlling unit of the paying firm. For a listed parent, that is the parent’s country, even though its shareholders may live anywhere. Among identified recipients, Greece (EUR 275 m) and Offshore financial centres (EUR 250 m) lead, followed by United States, Canada and France. “Offshore financial centres” is Eurostat’s aggregate of offshore financial jurisdictions; it also contains operating economies such as Hong Kong, which we count only once, inside the aggregate. When FATS names them as ultimate controller, the chain stops there; statistics cannot see who stands behind an offshore vehicle. This is one reason why Russia, often discussed as a large investor in Cyprus, appears small as an ultimate controller of *producing* firms. Ireland does not appear as a named ultimate controller although the holding company of Bank of Cyprus is incorporated there. FATS flags some Irish cells in 2021–2023, finance included, as confidential, while it publishes empty cells as zero, so Irish-controlled firms exist in Cypriot finance. The published EU-controlled total less the published EU member cells shows that all confidential EU controllers of finance, Ireland included, together hold EUR 40 m to EUR 92 m a year, net; this caps Irish-controlled finance only if none of the other confidential cells is negative. We never assign a suppressed economy’s total to a named country. Within a country’s published total, however, the split across sections is fitted where the section cell is suppressed; those rows are flagged as fitted and carry low confidence. EUR 1,063 m (46%) cannot be assigned. EUR 266 m is suppressed for confidentiality, and EUR 798 m is interest paid by firms, households and the government that the balance of payments publishes only as a world total.
 
 # Value chains: where does a euro of spending go?
 
@@ -441,27 +441,123 @@ Return to the EUR 20 commission. No accounts of the Cypriot subsidiary of the l
 <figcaption>Domestic value retention under alternative <span class="math inline"><em>θ</em></span> and tax assumptions.</figcaption>
 </figure>
 
-Figure 6 varies the two unobserved parameters. Moving $`\theta`$ from 0.6 to 1 changes 2023 retention by 2.0 percentage points. Not deducting corporate tax gives 91.7%. Not deducting interest from foreign-controlled surplus gives 91.7%; deducting interest net of receipts gives 92.2%; deducting actual interest before the bank-services adjustment gives 92.2%. Three variants test whether retention is overstated:
+Figure 6 varies the two unobserved parameters. Moving $`\theta`$ from 0.6 to 1 changes 2023 retention by 1.7 percentage points. Not deducting corporate tax gives 92.4%. Using the FATS level of foreign-controlled finance surplus where it exceeds the national accounts gives 92.4%. Not deducting interest from foreign-controlled surplus gives 92.3%; deducting interest net of receipts gives 92.7%; deducting actual interest before the bank-services adjustment gives 92.8%. Three variants test whether retention is overstated:
 
-- counting banks’ interest paid abroad gross, not net of receipts, and charging it to the borrowers whose loans it funds, gives 91.4% in 2023 and 86.9% in 2010 (against 94.6%). Banks paid EUR 1,503 m of such interest in 2010 and received EUR 2,065 m;
+- counting banks’ interest paid abroad gross, not net of receipts, and charging it to the borrowers whose loans it funds, gives 92.0% in 2023 and 86.9% in 2010 (against 94.6%). Banks paid EUR 1,503 m of such interest in 2010 and received EUR 2,065 m;
 
-- taking foreign-owned profit from the balance of payments instead of FATS, an upper bound because that series includes pass-through by holding companies, gives 86.4%;
+- taking foreign-owned profit from the balance of payments instead of FATS, an upper bound because that series includes pass-through by holding companies, gives 86.9%;
 
-- assigning the outflows of non-bank financial corporations to Cypriot production, capped at that industry’s surplus, gives 92.1%.
+- assigning the outflows of non-bank financial corporations to Cypriot production, capped at that industry’s surplus, gives 92.5%.
 
-Across all variants, 2023 retention lies between 85.0% and 93.8%. In every variant, retention in 2023 is below its 2020 level; the year-to-year path in between differs across variants. Reconciliation is exact for GDP and compensation. The official data satisfy the GNI identity to within 0.008%, which checks the data we use, not the model.
+Across all variants, 2023 retention lies between 85.0% and 94.2%. In every variant, retention in 2023 is below its 2020 level; the year-to-year path in between differs across variants. Reconciliation is exact for GDP and compensation. The official data satisfy the GNI identity to within 0.008%, which checks the data we use, not the model.
+
+# Cyprus among other small open economies
+
+Is 92.9% a lot or a little? To answer, we run the same estimator on five other euro-area economies: three that also host many foreign firms (Ireland, Luxembourg, the Netherlands) and two that do not (Greece, Portugal). Nothing in the method changes, only the sources. The rest-of-world account comes from Eurostat instead of CYSTAT, and the tax rate from the OECD. Run on Cyprus with the Eurostat sources, the estimator reproduces every mechanism to within the rounding of the two publications. Three caveats apply. First, $`\theta`$ is calibrated only for Cyprus, so elsewhere it is an assumption, and we also show $`\theta=1`$; the two differ by at most 2.6 points. Second, where a country suppresses an input we coarsen or skip, and never fill it in. Malta could not be included because it never publishes mining and energy separately. Third, from 2021 FATS covers finance in every country, so in the hubs years before and after 2021 are not comparable; we compare countries within a year.
+
+<div id="tab:comparison">
+
+<table>
+<caption>Domestic value retention in Cyprus and five EU economies (% of GDP)</caption>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th colspan="3" style="text-align: center;">Retention, Cyprus <span class="math inline"><em>θ</em></span></th>
+<th style="text-align: right;"><span class="math inline"><em>θ</em> = 1</span></th>
+<th style="text-align: right;">Official</th>
+<th style="text-align: left;">Largest outflow</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span>2-4</span> Country</td>
+<td style="text-align: right;">2015</td>
+<td style="text-align: right;">2019</td>
+<td style="text-align: right;">2023</td>
+<td style="text-align: right;">2023</td>
+<td style="text-align: right;">outflow 2023</td>
+<td style="text-align: left;">line, 2023</td>
+</tr>
+<tr>
+<td style="text-align: left;">Cyprus</td>
+<td style="text-align: right;">94.5</td>
+<td style="text-align: right;">95.1</td>
+<td style="text-align: right;">92.9</td>
+<td style="text-align: right;">92.5</td>
+<td style="text-align: right;">107.5</td>
+<td style="text-align: left;">foreign-owned profit (3.8)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ireland</td>
+<td style="text-align: right;">79.8</td>
+<td style="text-align: right;">78.6</td>
+<td style="text-align: right;">71.7</td>
+<td style="text-align: right;">69.2</td>
+<td style="text-align: right;">73.9</td>
+<td style="text-align: left;">foreign-owned profit (21.9)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Luxembourg</td>
+<td style="text-align: right;">80.6</td>
+<td style="text-align: right;">79.0</td>
+<td style="text-align: right;">74.0</td>
+<td style="text-align: right;">73.1</td>
+<td style="text-align: right;">442.8</td>
+<td style="text-align: left;">non-resident employees (17.5)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Netherlands</td>
+<td style="text-align: right;">92.3</td>
+<td style="text-align: right;">–</td>
+<td style="text-align: right;">92.8</td>
+<td style="text-align: right;">92.5</td>
+<td style="text-align: right;">38.7</td>
+<td style="text-align: left;">foreign-owned profit (2.7)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Greece</td>
+<td style="text-align: right;">96.3</td>
+<td style="text-align: right;">96.2</td>
+<td style="text-align: right;">95.4</td>
+<td style="text-align: right;">95.2</td>
+<td style="text-align: right;">7.1</td>
+<td style="text-align: left;">public debt interest (2.2)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Portugal</td>
+<td style="text-align: right;">94.6</td>
+<td style="text-align: right;">95.5</td>
+<td style="text-align: right;">95.4</td>
+<td style="text-align: right;">95.1</td>
+<td style="text-align: right;">8.2</td>
+<td style="text-align: left;">foreign-owned profit (2.8)</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+
+<div class="minipage">
+
+Notes: Frame A with the Cyprus method; other countries from Eurostat (`nasa_10_nf_tr`, `nama_10_a64`, FATS, `bop_c6_a`, `bop_rem6`) and OECD statutory tax rates. $`\theta`$ is calibrated for Cyprus only and assumed elsewhere; $`\theta=1`$ gives the lowest retention. Official outflow: primary income paid abroad (S2), which includes pass-through income. – = inputs suppressed (Netherlands 2019). Malta is omitted in every year (sections B, D not published separately in the national accounts). From 2021 FATS covers finance; before, foreign-owned banks’ profit comes from the balance of payments, so columns before and after 2021 differ in scope. Suppressed balance-of-payments items are omitted (a suppressed bank receipt is not netted): Cyprus: portfolio dividends (firms and households) (2015, 2019, 2023), portfolio dividends (banks, received) (2015, 2019, 2023); Ireland: portfolio dividends (firms and households) (2015, 2019), portfolio dividends (banks, received) (2019, 2023); Luxembourg: foreign-owned banks’ profit (banks) (2015, 2019), loan and deposit interest (firms and households) (2015, 2019, 2023), portfolio dividends (firms and households) (2015, 2019, 2023), policyholder income (firms and households) (2015, 2019, 2023), intra-group interest (firms and households) (2015, 2019, 2023), loan and deposit interest (banks) (2015, 2019, 2023), portfolio dividends (banks) (2015, 2019, 2023), policyholder income (banks) (2015, 2019, 2023), loan and deposit interest (banks, received) (2015, 2019, 2023), portfolio dividends (banks, received) (2015, 2019, 2023), policyholder income (banks, received) (2015, 2019, 2023), loan and deposit interest (government) (2015, 2019, 2023); Greece: foreign-owned banks’ profit (banks) (2015, 2019).
+
+</div>
+
+Table 4 shows three different ways to leak value. In Ireland, 21.9% of GDP in 2023 is profit of foreign-controlled firms, mostly in manufacturing and information and communication, and retention is 71.7%. In Luxembourg, the largest line, 17.5% of GDP, is pay to employees who live in France, Belgium and Germany. They are non-residents, so their pay leaves the economy. Their nationality plays no part in this; where they live is what counts. Luxembourg’s retention of 74.0% is overstated: much of the interest and dividends paid abroad by its firms, households, banks and government is confidential and therefore missing. In Greece (95.4%), the largest line is interest on public debt held abroad, 2.2% of GDP.
+
+The official outflow column is the reason for this exercise. Primary income paid abroad is 443% of GDP in Luxembourg, 108% in Cyprus, 74% in Ireland and 39% in the Netherlands. Most of it is income passing through holding companies and funds, so the official ratio says little about value retained. Ireland has a lower official ratio than Cyprus but retains much less, and the Netherlands a lower ratio than Cyprus and retains about as much. Cyprus retains about as much as the Netherlands (92.8%), less than Portugal (95.4%) and Greece, and at least 18 points more than Ireland and Luxembourg.
 
 # Limitations
 
-The full list, with the data that would remove each limitation, is in the repository’s limitations file. The most important are these. (i) Retention is an upper bound. Outflows we cannot measure count as retained: rent earned by non-resident owners of Cypriot dwellings, and FDI income from stakes of 10–50% in domestically controlled firms. (ii) Before 2021, foreign-owned insurers and auxiliary financial firms are missing. In 2021, their first year, they accounted for about 0.6% of GDP (an allocated share of FATS finance). (iii) $`\theta`$ is calibrated on documented large firms, not measured. (iv) Excluding non-bank financial corporations is a sector rule, not an entity-level SPE flag. (v) Residence follows incorporation, so a Cypriot bank whose holding company is incorporated in Ireland is Irish-controlled at company level, although its shareholders include Cypriots. (vi) FATS operating surplus and national-accounts operating surplus differ in concept (treatment of financial intermediation services, software and research, statistical units), and the interest deduction is not applied to finance. (vii) Imports are attributed to the direct supplier.
+The full list, with the data that would remove each limitation, is in the repository’s limitations file. The most important are these. (i) Retention is an upper bound. Outflows we cannot measure count as retained: rent earned by non-resident owners of Cypriot dwellings, and FDI income from stakes of 10–50% in domestically controlled firms. (ii) Before 2021, foreign-owned insurers and auxiliary financial firms are missing. In 2021, their first year, they accounted for about 0.3% of GDP (an allocated share of FATS finance). (iii) $`\theta`$ is calibrated on documented large firms, not measured. (iv) Excluding non-bank financial corporations is a sector rule, not an entity-level SPE flag. (v) Residence follows incorporation, so a Cypriot bank whose holding company is incorporated in Ireland is Irish-controlled at company level, although its shareholders include Cypriots. (vi) FATS operating surplus and national-accounts operating surplus differ in concept (treatment of financial intermediation services, software and research, statistical units), and the interest deduction is not applied to finance. (vii) Imports are attributed to the direct supplier.
 
 # Discussion
 
-The headline—Cyprus retains at most 92.4% of the value it produces—is less dramatic than the official outflow and more informative. It separates two things that official aggregates mix. One is Cyprus as a financial conduit, through which foreign income flows at a multiple of GDP. The other is Cyprus as a producing economy, where foreign-controlled firms account for 22.0% of non-financial corporate operating surplus before interest and tax, a share that has grown since 2020. Adding a country is a data run, not a new model: every Eurostat input exists for all EU member states, and the only Cyprus-specific loader, for sector accounts, has a Eurostat equivalent.
+The headline—Cyprus retains at most 92.9% of the value it produces—is less dramatic than the official outflow and more informative. It separates two things that official aggregates mix. One is Cyprus as a financial conduit, through which foreign income flows of the order of GDP (between two-thirds of GDP and 1.7 times GDP a year). The other is Cyprus as a producing economy, where foreign-controlled firms account for 22.0% of non-financial corporate operating surplus before interest and tax, a share that has grown since 2020. Adding a country is a data run, not a new model: every Eurostat input exists for all EU member states, and the only Cyprus-specific loader, for sector accounts, has a Eurostat equivalent.
 
 # Conclusion
 
-Of the value generated in Cyprus in 2023, at most 92.4% accrued to residents and at least 7.6% to the rest of the world. Most of what accrued abroad was profits of foreign-owned firms, with Greece, Offshore financial centres, United States and Canada as the largest identified recipients. Official primary-income outflows, at 108% of GDP, measure something else: the traffic of a financial hub. Every number above can be traced in the accompanying database and dashboard, from the headline through industry, mechanism and source table to the calculation that produced it.
+Of the value generated in Cyprus in 2023, at most 92.9% accrued to residents and at least 7.1% to the rest of the world. Most of what accrued abroad was profits of foreign-owned firms, with Greece, Offshore financial centres, United States and Canada as the largest identified recipients. Official primary-income outflows, at 108% of GDP, measure something else: the traffic of a financial hub. Every number above can be traced in the accompanying database and dashboard, from the headline through industry, mechanism and source table to the calculation that produced it.
 
 # Data appendix
 

@@ -9,6 +9,7 @@ const NAV = [
   ['/country/cyprus/industries/', 'Industries'],
   ['/country/cyprus/flows/', 'Flows'],
   ['/country/cyprus/ownership/', 'Ownership'],
+  ['/compare/', 'Compare'],
   ['/methodology/', 'Methodology'],
   ['/data/', 'Data'],
 ] as const;

@@ -673,12 +673,22 @@ def main(argv=None) -> int:
     )
     ap.add_argument("--list", action="store_true")
     ap.add_argument(
+        "--raw-dir",
+        default=None,
+        help="write files and MANIFEST.csv here instead of data/raw/eurostat "
+        "(comparison countries go to data/raw/eurostat_eu so they never mix with the Cyprus inputs)",
+    )
+    ap.add_argument(
         "--figaro-year",
         type=int,
         default=None,
         help="also download the full FIGARO industry-by-industry matrix for this year",
     )
     a = ap.parse_args(argv)
+    if a.raw_dir:
+        global RAW_DIR, MANIFEST
+        RAW_DIR = Path(a.raw_dir).resolve()
+        MANIFEST = RAW_DIR / "MANIFEST.csv"
     geos = (
         EU27
         if a.geo.upper() == "EU27"

@@ -108,6 +108,68 @@ def interest_ratios() -> str:
     )
 
 
+COUNTRY_NAMES = {"CY": "Cyprus", "IE": "Ireland", "LU": "Luxembourg", "NL": "Netherlands", "EL": "Greece", "PT": "Portugal"}
+MECH_SHORT = {
+    "share_compensation_nonresident": "non-resident employees",
+    "share_fdi_income": "foreign-owned profit",
+    "share_fdi_debt_interest": "intra-group interest",
+    "share_other_investment_income": "loan and deposit interest",
+    "share_portfolio_income": "portfolio income",
+    "share_public_debt_interest": "public debt interest",
+    "share_taxes_to_eu_institutions": "taxes to EU",
+}
+
+
+def comparison(years=(2015, 2019, 2023)) -> str:
+    r = pd.read_parquet(P / "comparison.parquet")
+    c = r[r.variant == "theta_cyprus"].set_index(["geo", "year"])
+    one = r[r.variant == "theta_1"].set_index(["geo", "year"])
+    last = max(years)
+
+    def cell(frame, g, y, col="domestic_value_retention"):
+        return pc(frame.loc[(g, y), col]) if (g, y) in frame.index else "--"
+
+    rows = []
+    for g, name in COUNTRY_NAMES.items():
+        if (g, last) in c.index:
+            x = c.loc[(g, last)]
+            m = max(MECH_SHORT, key=lambda k: x.get(k, 0.0))
+            top = f"{MECH_SHORT[m]} ({pc(x[m])})"
+        else:
+            top = "--"
+        rows.append(
+            f"{name} & " + " & ".join(cell(c, g, y) for y in years) + f" & {cell(one, g, last)} & {cell(c, g, last, 'primary_income_outflow_to_gdp')} & {top} \\\\"
+        )
+    skipped = pd.read_parquet(P / "comparison_skipped.parquet")
+    miss = "; ".join(f"{COUNTRY_NAMES.get(g, g)} {', '.join(str(y) for y in sorted(v) if y in years)}" for g, v in skipped[skipped.year.isin(years)].groupby("geo").year if g != "MT")
+    head = " & ".join(str(y) for y in years)
+    mt = skipped[skipped.geo == "MT"]
+    malta = f"Malta is omitted in every year ({_tex(mt.reason.iloc[0])}). " if len(mt) == r.year.nunique() else ""
+    shown_rows = c[c.index.get_level_values("year").isin(years)].reset_index()
+    shown_rows = shown_rows[shown_rows.missing_lines != ""]
+    lines = shown_rows.assign(line=shown_rows.missing_lines.str.split("; ")).explode("line")
+    parts = []
+    for g, grp in lines.groupby("geo", sort=False):  # each country once, each line with its years
+        if g not in COUNTRY_NAMES:
+            continue
+        items = [f"{line} ({', '.join(str(y) for y in sorted(ly.year))})" for line, ly in grp.groupby("line", sort=False)]
+        parts.append(f"{COUNTRY_NAMES[g]}: {', '.join(items)}")
+    gaps = "; ".join(parts) or "none"
+    return (
+        "\\begin{table}[!htbp]\n\\centering\n\\small\n\\caption{Domestic value retention in Cyprus and five EU economies (\\% of GDP)}\n\\label{tab:comparison}\n"
+        "\\begin{tabular}{lrrrrr>{\\raggedright\\arraybackslash}p{0.27\\textwidth}}\n\\toprule\n"
+        f" & \\multicolumn{{{len(years)}}}{{c}}{{Retention, Cyprus $\\theta$}} & $\\theta=1$ & Official & Largest outflow \\\\\n"
+        f"\\cmidrule(lr){{2-{len(years) + 1}}}\n"
+        f"Country & {head} & {last} & outflow {last} & line, {last} \\\\\n\\midrule\n"
+        + "\n".join(rows)
+        + "\n\\bottomrule\n\\end{tabular}\n\n\\smallskip\n\\begin{minipage}{0.95\\textwidth}\\footnotesize Notes: Frame A with the Cyprus method; other countries from Eurostat (\\texttt{nasa\\_10\\_nf\\_tr}, \\texttt{nama\\_10\\_a64}, FATS, \\texttt{bop\\_c6\\_a}, \\texttt{bop\\_rem6}) and OECD statutory tax rates. "
+        "$\\theta$ is calibrated for Cyprus only and assumed elsewhere; $\\theta=1$ gives the lowest retention. Official outflow: primary income paid abroad (S2), which includes pass-through income. "
+        f"-- = inputs suppressed ({_tex(miss) if miss else 'none'}). {malta}"
+        "From 2021 FATS covers finance; before, foreign-owned banks' profit comes from the balance of payments, so columns before and after 2021 differ in scope. "
+        f"Suppressed balance-of-payments items are omitted (a suppressed bank receipt is not netted): {_tex(gaps)}.\\end{{minipage}}\n\\end{{table}}\n"
+    )
+
+
 def data_appendix() -> str:
     cat = pd.read_csv("data_catalogue.csv")
     g = cat.groupby("provider").agg(n=("dataset", "size")).reset_index()
@@ -171,6 +233,7 @@ def main() -> None:
     (T / "bridge.tex").write_text(bridge())
     (T / "interest_ratios.tex").write_text(interest_ratios())
     (T / "validation.tex").write_text(validation())
+    (T / "comparison.tex").write_text(comparison())
     print("tables written")
 
 

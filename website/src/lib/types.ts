@@ -146,6 +146,10 @@ export interface SensRow {
   tax: string;
   include_ofc: boolean;
   consistent_scope: boolean;
+  banks_gross: boolean;
+  bop_upper: boolean;
+  rho_basis: string;
+  fats_na_level: boolean;
   source: string;
   methodology: string;
   status: string;

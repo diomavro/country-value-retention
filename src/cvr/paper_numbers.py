@@ -7,6 +7,7 @@ updates the text.  Macro names are letters only (LaTeX restriction).
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 
 import numpy as np
@@ -235,8 +236,9 @@ def main() -> None:
     put("PlatLabour", f"{ex['cyprus_labour_platform']:.2f}")
 
     # sensitivity, last year: theta x tax (central scope), and the full envelope of all variants
-    s = sens[(sens.year == L) & (~sens.include_ofc) & (~sens.consistent_scope) & (~sens.banks_gross) & (~sens.bop_upper) & (sens.rho_basis == "d41_gross")]
+    s = sens[(sens.year == L) & (~sens.include_ofc) & (~sens.consistent_scope) & (~sens.banks_gross) & (~sens.bop_upper) & (sens.rho_basis == "d41_gross") & sens.fats_na_level]
     th = s[s.tax == "statutory"].set_index("theta").domestic_value_retention
+    assert not th.index.duplicated().any(), "theta grid: more than one row per theta (a variant leaked in)"
     put("SensThetaSpreadPP", f"{100 * (th.max() - th.min()):.1f}")
     put("SensDVRLow", pct(s.domestic_value_retention.min()))
     put("SensDVRHigh", pct(s.domestic_value_retention.max()))
@@ -244,11 +246,12 @@ def main() -> None:
     put("SensAllLow", pct(allL.domestic_value_retention.min()))
     put("SensAllHigh", pct(allL.domestic_value_retention.max()))
     one = lambda **kw: allL.loc[np.logical_and.reduce([allL[k] == v for k, v in kw.items()]), "domestic_value_retention"].iloc[0]
-    base = dict(theta=m.loc[L, "theta"], tax="statutory", include_ofc=False, consistent_scope=False, banks_gross=False, bop_upper=False, rho_basis="d41_gross")
+    base = dict(theta=m.loc[L, "theta"], tax="statutory", include_ofc=False, consistent_scope=False, banks_gross=False, bop_upper=False, rho_basis="d41_gross", fats_na_level=True)
     put("SensOFCDVR", pct(one(**{**base, "include_ofc": True})))
     put("SensBopUpperDVR", pct(one(**{**base, "bop_upper": True})))
     put("SensBanksGrossDVR", pct(one(**{**base, "banks_gross": True})))
     put("SensNoTaxDVR", pct(one(**{**base, "tax": "none"})))
+    put("SensFatsLevelDVR", pct(one(**{**base, "fats_na_level": False})))
     put("SensRhoNoneDVR", pct(one(**{**base, "rho_basis": "none"})))
     put("SensRhoGrossDVR", pct(one(**{**base, "rho_basis": "d41g_gross"})))
     put("SensRhoNetDVR", pct(one(**{**base, "rho_basis": "d41_net"})))
@@ -269,6 +272,41 @@ def main() -> None:
 
     put("BankBopLast", eur(_bop(L, "S122", "D4S__D__F5", "DEB")[0]))
     put("BankFatsLast", eur(k64_fats))
+
+    def k_fdi(y, codes):
+        ty = t[(t.year == y) & (t.mechanism == "fdi_income")]
+        return float(ty[ty.industry.isin(codes)].value.sum())
+
+    fats_years = [y for y in range(2021, L) if y in m.index]  # FATS covers banks from 2021
+    put("BankAgreeGap", eur(max(abs(_bop(y, "S122", "D4S__D__F5", "DEB")[0] - k_fdi(y, ["K64"])) for y in fats_years)))
+    put("InsAuxShareFirstFats", pct(k_fdi(2021, ["K65", "K66"]) / m.loc[2021, "gdp"]))
+    from .model.frame_a import fats_foreign_gos
+
+    put("FATSPublishedLast", bn(fats_foreign_gos(L)["total"], 2))  # as published, before the finance cap
+
+    # upper bound on Irish-controlled finance: published EU-controlled K less the published EU member cells
+    from .model.frame_a import _one
+
+    eu27 = "AT BE BG CZ DE DK EE EL ES FI FR HR HU IE IT LT LU LV MT NL PL PT RO SE SI SK".split()
+    fk = _one("fats_activ__*.parquet")
+    fk = fk[(fk.indic_sbs == "GOS_MEUR") & (fk.nace_r2 == "K")]
+    bound = {}
+    for y in sorted(fk.TIME_PERIOD.astype(int).unique()):
+        x = fk[fk.TIME_PERIOD.astype(int) == y].set_index("c_ctrl").OBS_VALUE
+        bound[y] = float(x["INT_EU27_2020"] - x.reindex(eu27).dropna().sum())
+    put("IrishFinBoundFirst", eur(min(bound.values())))
+    put("IrishFinBoundLast", eur(max(bound.values())))
+
+    # shares of confidential cells in the raw FATS and FDI-income files (data-table note)
+    def conf(pattern, y0=None, y1=None):
+        d = _one(pattern)
+        yr = d.TIME_PERIOD.astype(int)
+        d = d[(yr >= (y0 or yr.min())) & (yr <= (y1 or yr.max()))]
+        return float((d.CONF_STATUS == "C").mean())
+
+    put("ConfFatsLow", pct(conf("fats_g1a_08__*.parquet"), 0))
+    put("ConfFatsHigh", pct(conf("fats_activ__*.parquet"), 0))
+    put("ConfFdi", pct(conf("bop_fdi6_inc__*.parquet", None, L), 0))
     put("BanksPaidFirst", eur(m.loc[first, "banks_interest_paid"]))
     put("BanksRecvFirst", eur(m.loc[first, "banks_interest_received"]))
     br = pd.read_parquet(P / "bridge.parquet")
@@ -292,6 +330,25 @@ def main() -> None:
     put("CatalogueN", str(len(cat)))
     r = rec[rec.check.str.startswith("GNI")]
     put("GNIMaxGap", f"{r.pct_difference.abs().max():.3f}\\%")
+
+    # other countries (cvr.compare): Cyprus method, Eurostat inputs
+    cr = pd.read_parquet(P / "comparison.parquet")
+    cc = cr[cr.variant == "theta_cyprus"].set_index(["geo", "year"])
+    CL = int(cc.index.get_level_values("year").max())
+    put("CmpYear", str(CL))
+    for g, name in {"IE": "IE", "LU": "LU", "NL": "NL", "EL": "EL", "PT": "PT"}.items():
+        put(f"Cmp{name}", pct(cc.loc[(g, CL), "domestic_value_retention"]))
+        put(f"Cmp{name}Official", pct(cc.loc[(g, CL), "primary_income_outflow_to_gdp"], 0))
+    put("CmpIEProfit", pct(cc.loc[("IE", CL), "share_fdi_income"]))
+    put("CmpLUCommuters", pct(cc.loc[("LU", CL), "share_compensation_nonresident"]))
+    put("CmpELPublic", pct(cc.loc[("EL", CL), "share_public_debt_interest"]))
+    gap = cr.pivot_table(index=["geo", "year"], columns="variant", values="domestic_value_retention")
+    cy_last = cc.loc[("CY", CL), "domestic_value_retention"]
+    # "at least N points": floor, so the rounded table values never contradict the text
+    put("CmpHubGap", str(math.floor(100 * (cy_last - max(cc.loc[(g, CL), "domestic_value_retention"] for g in ("IE", "LU"))))))
+    put("CmpThetaMaxGap", f"{100 * (gap.theta_cyprus - gap.theta_1).max():.1f}")
+    cy_check = abs(cc.loc[("CY", CL), "domestic_value_retention"] - m.loc[CL, "domestic_value_retention"])
+    assert cy_check < 1e-9, f"comparison Cyprus row differs from the headline by {cy_check}"
 
     OUT.parent.mkdir(exist_ok=True)
     body = "% Generated by src/cvr/paper_numbers.py -- do not edit by hand.\n"

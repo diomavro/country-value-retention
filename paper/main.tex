@@ -211,7 +211,7 @@ Company filings (\FirmsN{} operating firms) & shareholders, parents, ultimate co
 
 \smallskip
 \begin{minipage}{0.92\textwidth}\footnotesize
-Notes: confidential cells (22--26\% of FATS and FDI income cells) are kept as missing, never set to zero.
+Notes: confidential cells (\ConfFatsLow{}--\ConfFatsHigh{} of FATS cells, \ConfFdi{} of FDI income cells up to \LastYear) are kept as missing, never set to zero.
 Where a missing BoP cell leaves a flow unmeasured, the estimate is a lower bound on that flow and the omission is reported.
 Full catalogue in \texttt{data\_catalogue.csv}.
 \end{minipage}
@@ -223,7 +223,7 @@ The symmetric tables contain no confidential cells and reconcile exactly to GDP 
 Second, the balance of payments is dominated by pass-through.
 In \LastYear{}, FDI income paid abroad was \EUR\TotalFDIPaidLastEUR~bn.
 Excluding SPEs, as Eurostat publishes them, it was \EUR\NonSPEFDILastEUR~bn (\NonSPEFDILast{} of GDP).
-Even that exceeds the operating surplus of all foreign-controlled firms in FATS (\EUR\FATSForeignGOSLast~bn), because holding and trading companies with staff are not SPEs but still pass on foreign-earned income.
+Even that exceeds the operating surplus of all foreign-controlled firms in FATS (\EUR\FATSPublishedLast~bn; \EUR\FATSForeignGOSLast~bn with finance at the national-accounts level), because holding and trading companies with staff are not SPEs but still pass on foreign-earned income.
 We therefore measure foreign-owned profit from the production side (FATS) and use the payments side as a comparator, bridged line by line in \cref{sec:bridge}.
 
 \section{Methodology}
@@ -263,6 +263,9 @@ For finance, $\rho=0$, because interest is the core business.
 $\tau_t$ is 10\% to 2012 and 12.5\% from 2013.
 Effective rates are lower, so the no-tax case is reported as a bound (\cref{sec:robust}).
 The recipient share $\sigma_{s,j}$ is fitted section by section.
+From 2021, when FATS covers finance, its operating surplus of all financial firms can exceed what the national accounts record for finance; in financial centres business statistics can include income of holding and fund structures.
+Where it does, we keep the FATS foreign-controlled share of finance, and of each country within it, and take the level from the national accounts.
+We apply this to finance only: in other sections FATS and the national accounts differ by definition (before 2021 FATS surplus is value added minus personnel costs), for Cyprus in both directions, and a one-sided cut would bias foreign profit down.
 FATS publishes some section $\times$ country cells; these are held fixed, and the unpublished cells are fitted so that rows add to section totals and columns to the published country totals (iterative proportional fitting).
 Countries that Eurostat suppresses remain in a ``confidential'' category: we do not model values for suppressed cells, which could otherwise be backed out from published totals.
 Before 2021 FATS excludes finance, so profits of foreign-owned banks enter through the balance of payments.
@@ -331,7 +334,7 @@ Two kinds of automated checks run after every build (\cref{app:method}).
 \emph{Identities} hold by construction, such as the accounting summing to GDP.
 \emph{Source checks} recompute each outflow from its own raw source and fail if a flow is dropped, doubled or mis-scaled.
 Pay to non-resident workers must equal the rest-of-world D1 net of employers' contributions.
-The FATS base of foreign-owned profit must equal the published FATS total.
+The FATS base of foreign-owned profit must equal the published FATS total, less any amount above the national-accounts level.
 Foreign-owned banks must be counted exactly once.
 The bridge of \cref{sec:bridge} must close.
 Unit tests pin the rules that revenue never enters, and that wages and taxes can never be booked as foreign capital income.
@@ -389,7 +392,7 @@ This line, not the SPE rule, explains most of the distance between the official 
 Banks show the largest disagreement between two official sources.
 In \LastYear{} the balance of payments records FDI equity income paid by banks of \EUR\BankBopLast~m, almost all of it reinvested earnings.
 Our FATS-based profit of foreign-owned banks is \EUR\BankFatsLast~m, although the balance-of-payments figure is already after interest and tax and should, if anything, be smaller.
-The two sources agree in 2021 and 2022 (within \EUR61m) and diverge only in \LastYear{}, when bank profits jumped.
+The two sources agree in 2021 and 2022 (within \EUR\BankAgreeGap~m) and diverge only in \LastYear{}, when bank profits jumped.
 Our \EUR\BankFatsLast~m is the banks' share of FATS finance, which is published only as a whole; against all of finance the observed gap is smaller but still large.
 Three explanations are possible, and published data cannot separate them; the timing fits best a large bank that the two sources classify differently.
 FATS may treat Bank of Cyprus as domestically controlled, while the balance of payments treats all its profit as income of its Irish holding company.
@@ -405,7 +408,7 @@ The consistent-scope series (\DVRConsLast{} retention in \LastYear{}) uses the b
 
 \Cref{tab:industries} reports, for industries of policy interest and the largest ones, their GVA, foreign input exposure, foreign ownership capture and retention.
 In \LastYear{} the largest outflows came from \IndOneName{} (\EUR\IndOneEUR~m; retention \IndOneDVR) and \IndTwoName{} (\EUR\IndTwoEUR~m; \IndTwoDVR).
-Public administration and education retain close to 100\%: they have little or no operating surplus to pay abroad.
+Public administration retains almost all of its value added: it has little operating surplus to pay abroad.
 FATS publishes finance only as a whole, so foreign-owned profit in finance is split between banking, insurance and auxiliary services in proportion to their operating surplus; the split is an allocation, not an observation.
 Publishing (including software) and IT services are activities where intellectual property matters.
 Their measured surplus may partly be profit shifted into Cyprus by multinational groups \citep{Guvenenetal2022}.
@@ -429,8 +432,9 @@ Among identified recipients, \RecOneName{} (\EUR\RecOneEUR~m) and \RecTwoName{} 
 ``Offshore financial centres'' is Eurostat's aggregate of offshore financial jurisdictions; it also contains operating economies such as Hong Kong, which we count only once, inside the aggregate.
 When FATS names them as ultimate controller, the chain stops there; statistics cannot see who stands behind an offshore vehicle.
 This is one reason why Russia, often discussed as a large investor in Cyprus, appears small as an ultimate controller of \emph{producing} firms.
-Ireland does not appear although the holding company of Bank of Cyprus is incorporated there.
-FATS does not publish Ireland as an ultimate controlling economy in these years; whether it treats the bank as Irish-controlled (and suppresses the cell) or looks through the redomiciled holding to domestic control cannot be told from published data.
+Ireland does not appear as a named ultimate controller although the holding company of Bank of Cyprus is incorporated there.
+FATS flags some Irish cells in 2021--2023, finance included, as confidential, while it publishes empty cells as zero, so Irish-controlled firms exist in Cypriot finance.
+The published EU-controlled total less the published EU member cells shows that all confidential EU controllers of finance, Ireland included, together hold \EUR\IrishFinBoundFirst~m to \EUR\IrishFinBoundLast~m a year, net; this caps Irish-controlled finance only if none of the other confidential cells is negative.
 We never assign a suppressed economy's total to a named country.
 Within a country's published total, however, the split across sections is fitted where the section cell is suppressed; those rows are flagged as fitted and carry low confidence.
 \EUR\RecUnknownEUR~m (\RecUnknownShare) cannot be assigned.
@@ -488,6 +492,7 @@ The example is illustrative and is not part of any headline number.
 \Cref{fig:sens} varies the two unobserved parameters.
 Moving $\theta$ from 0.6 to 1 changes \LastYear{} retention by \SensThetaSpreadPP{} percentage points.
 Not deducting corporate tax gives \SensNoTaxDVR{}.
+Using the FATS level of foreign-controlled finance surplus where it exceeds the national accounts gives \SensFatsLevelDVR{}.
 Not deducting interest from foreign-controlled surplus gives \SensRhoNoneDVR{}; deducting interest net of receipts gives \SensRhoNetDVR{}; deducting actual interest before the bank-services adjustment gives \SensRhoGrossDVR{}.
 Three variants test whether retention is overstated:
 \begin{itemize}
@@ -500,6 +505,36 @@ In every variant, retention in \LastYear{} is below its 2020 level; the year-to-
 Reconciliation is exact for GDP and compensation.
 The official data satisfy the GNI identity to within \GNIMaxGap{}, which checks the data we use, not the model.
 
+\section{Cyprus among other small open economies}
+\label{sec:compare}
+
+Is \DVRLast{} a lot or a little?
+To answer, we run the same estimator on five other euro-area economies: three that also host many foreign firms (Ireland, Luxembourg, the Netherlands) and two that do not (Greece, Portugal).
+Nothing in the method changes, only the sources.
+The rest-of-world account comes from Eurostat instead of CYSTAT, and the tax rate from the OECD.
+Run on Cyprus with the Eurostat sources, the estimator reproduces every mechanism to within the rounding of the two publications.
+Three caveats apply.
+First, $\theta$ is calibrated only for Cyprus, so elsewhere it is an assumption, and we also show $\theta=1$; the two differ by at most \CmpThetaMaxGap{} points.
+Second, where a country suppresses an input we coarsen or skip, and never fill it in.
+Malta could not be included because it never publishes mining and energy separately.
+Third, from 2021 FATS covers finance in every country, so in the hubs years before and after 2021 are not comparable; we compare countries within a year.
+
+\input{tables/comparison.tex}
+
+\Cref{tab:comparison} shows three different ways to leak value.
+In Ireland, \CmpIEProfit{} of GDP in \CmpYear{} is profit of foreign-controlled firms, mostly in manufacturing and information and communication, and retention is \CmpIE.
+In Luxembourg, the largest line, \CmpLUCommuters{} of GDP, is pay to employees who live in France, Belgium and Germany.
+They are non-residents, so their pay leaves the economy.
+Their nationality plays no part in this; where they live is what counts.
+Luxembourg's retention of \CmpLU{} is overstated: much of the interest and dividends paid abroad by its firms, households, banks and government is confidential and therefore missing.
+In Greece (\CmpEL), the largest line is interest on public debt held abroad, \CmpELPublic{} of GDP.
+
+The official outflow column is the reason for this exercise.
+Primary income paid abroad is \CmpLUOfficial{} of GDP in Luxembourg, \OfficialOutLast{} in Cyprus, \CmpIEOfficial{} in Ireland and \CmpNLOfficial{} in the Netherlands.
+Most of it is income passing through holding companies and funds, so the official ratio says little about value retained.
+Ireland has a lower official ratio than Cyprus but retains much less, and the Netherlands a lower ratio than Cyprus and retains about as much.
+Cyprus retains about as much as the Netherlands (\CmpNL), less than Portugal (\CmpPT) and Greece, and at least \CmpHubGap{} points more than Ireland and Luxembourg.
+
 \section{Limitations}
 \label{sec:limits}
 
@@ -508,7 +543,7 @@ The most important are these.
 (i) Retention is an upper bound.
 Outflows we cannot measure count as retained: rent earned by non-resident owners of Cypriot dwellings, and FDI income from stakes of 10--50\% in domestically controlled firms.
 (ii) Before 2021, foreign-owned insurers and auxiliary financial firms are missing.
-In 2021, their first year, they accounted for about 0.6\% of GDP (an allocated share of FATS finance).
+In 2021, their first year, they accounted for about \InsAuxShareFirstFats{} of GDP (an allocated share of FATS finance).
 (iii) $\theta$ is calibrated on documented large firms, not measured.
 (iv) Excluding non-bank financial corporations is a sector rule, not an entity-level SPE flag.
 (v) Residence follows incorporation, so a Cypriot bank whose holding company is incorporated in Ireland is Irish-controlled at company level, although its shareholders include Cypriots.
@@ -520,7 +555,7 @@ In 2021, their first year, they accounted for about 0.6\% of GDP (an allocated s
 
 The headline---Cyprus retains at most \DVRLast{} of the value it produces---is less dramatic than the official outflow and more informative.
 It separates two things that official aggregates mix.
-One is Cyprus as a financial conduit, through which foreign income flows at a multiple of GDP.
+One is Cyprus as a financial conduit, through which foreign income flows of the order of GDP (between two-thirds of GDP and 1.7 times GDP a year).
 The other is Cyprus as a producing economy, where foreign-controlled firms account for \FOCLast{} of non-financial corporate operating surplus before interest and tax, a share that has grown since 2020.
 Adding a country is a data run, not a new model: every Eurostat input exists for all EU member states, and the only Cyprus-specific loader, for sector accounts, has a Eurostat equivalent.
 

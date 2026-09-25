@@ -44,7 +44,8 @@ def main() -> None:
     tex = (PAPER / "main.tex").read_text()
     # macros are defined in numbers.tex, so prepend it for the stand-alone conversion
     abstract = pypandoc.convert_text(
-        (PAPER / "numbers.tex").read_text() + re.search(r"\\begin\{abstract\}(.*?)\\end\{abstract\}", tex, re.S).group(1),
+        "\\newcommand{\\EUR}{EUR~}\n"  # defined in the main.tex preamble, which is not converted here
+        + (PAPER / "numbers.tex").read_text() + re.search(r"\\begin\{abstract\}(.*?)\\end\{abstract\}", tex, re.S).group(1),
         "gfm",
         format="latex",
         extra_args=["--wrap=none"],

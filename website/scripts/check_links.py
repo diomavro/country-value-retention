@@ -14,7 +14,7 @@ from urllib.parse import unquote, urlparse
 
 OUT = Path(__file__).resolve().parents[1] / "out"
 ATTR = re.compile(r'(?:href|src)="([^"#?]+)')
-DATA = re.compile(r"data/(cy/[\w./-]+\.json|catalogue\.json|names\.json)")
+DATA = re.compile(r"data/(cy/[\w./-]+\.json|catalogue\.json|names\.json|compare\.json)")
 
 
 def resolve(path: str, base: str) -> Path | None:

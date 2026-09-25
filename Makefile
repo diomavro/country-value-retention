@@ -9,6 +9,9 @@ all: ingest process model validate paper
 ingest:            ## download official sources (CYSTAT PxWeb, Eurostat API, CBC) -> data/raw
 	$(UV) python -m cvr.ingest.cystat_fetch
 	$(UV) python -m cvr.ingest.eurostat --geo CY
+	$(UV) python -m cvr.ingest.eurostat --geo MT,IE,LU,NL,EL,PT --raw-dir data/raw/eurostat_eu --no-eu-aggregate \
+		--only gva_a64,sector_nf,bop_pi_sector,bop_rem,fats_activ,fats_g1a_08
+	$(UV) python -m cvr.ingest.oecd
 	$(UV) python -m cvr.ingest.cbc
 
 process:           ## verify raw files against manifest checksums, then parse -> data/interim
@@ -18,6 +21,7 @@ process:           ## verify raw files against manifest checksums, then parse ->
 model:             ## Frame A/B, IO indicators, ownership, sensitivity -> data/processed + DuckDB
 	$(UV) python -m cvr.catalogue
 	$(UV) python -m cvr.pipeline
+	$(UV) python -m cvr.compare
 	$(UV) python -m cvr.examples.platform
 
 validate:          ## accounting identities + unit tests; non-zero exit on any failure

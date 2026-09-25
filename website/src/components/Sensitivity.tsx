@@ -11,7 +11,17 @@ export default function Sensitivity({ rows, headlineTheta }: { rows: SensRow[]; 
   const [year, setYear] = useState(years.includes(2022) ? 2022 : years[years.length - 1]);
   const [ofc, setOfc] = useState(false);
   const [scope, setScope] = useState(false);
-  const sel = useMemo(() => rows.filter((r) => r.year === year && r.include_ofc === ofc && r.consistent_scope === scope), [rows, year, ofc, scope]);
+  const sel = useMemo(() => rows.filter(
+        (r) =>
+          r.year === year &&
+          r.include_ofc === ofc &&
+          r.consistent_scope === scope &&
+          // theta x tax grid only: one-at-a-time variants share its theta values
+          !r.banks_gross &&
+          !r.bop_upper &&
+          r.rho_basis === 'd41_gross' &&
+          r.fats_na_level !== false,
+      ), [rows, year, ofc, scope]);
   const thetas = [...new Set(sel.map((r) => r.theta))].sort();
   const prov = (r?: SensRow): Prov => ({
     status: r?.status || 'estimated',

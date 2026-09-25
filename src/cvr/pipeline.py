@@ -39,6 +39,7 @@ SOURCE_URLS = {
     "nama_10_a64": "https://ec.europa.eu/eurostat/databrowser/view/nama_10_a64/default/table",
     "nasa_10_nf_tr": "https://ec.europa.eu/eurostat/databrowser/view/nasa_10_nf_tr/default/table",
     "naio_10_fcp": "https://ec.europa.eu/eurostat/databrowser/view/naio_10_fcp_ii4/default/table",
+    "OECD": "https://data-explorer.oecd.org/vis?df[ds]=DisseminateFinalDMZ&df[id]=DSD_TAX_CIT%40DF_CIT&df[ag]=OECD.CTP.TPS",
     "company filings": REPO + "data/raw/companies/SOURCES.md",
     "model output": REPO + "docs/methodology.md",
 }
@@ -201,18 +202,19 @@ def sensitivity() -> pd.DataFrame:
     ]
     grid += [
         frame_a.Params(banks_gross=True),
+        frame_a.Params(fats_na_level=False),
         frame_a.Params(bop_upper=True),
         frame_a.Params(rho_basis="none"),
         frame_a.Params(rho_basis="d41_net"),
         frame_a.Params(rho_basis="d41g_gross"),
-        frame_a.Params(banks_gross=True, bop_upper=True, include_ofc=True, tax="none", theta=1.0, rho_basis="none"),
+        frame_a.Params(banks_gross=True, bop_upper=True, include_ofc=True, tax="none", theta=1.0, rho_basis="none", fats_na_level=False),
     ]
     rows = []
     for prm in grid:
         _, m = run_frame_a(prm)
         rows.append(
             m[["year", "domestic_value_retention", "foreign_value_leakage", "foreign_ownership_capture"]].assign(
-                theta=prm.theta if prm.theta is not None else frame_a.calibrated_theta(), tax=prm.tax, include_ofc=prm.include_ofc, consistent_scope=prm.consistent_scope, banks_gross=prm.banks_gross, bop_upper=prm.bop_upper, rho_basis=prm.rho_basis
+                theta=prm.theta if prm.theta is not None else frame_a.calibrated_theta(), tax=prm.tax, include_ofc=prm.include_ofc, consistent_scope=prm.consistent_scope, banks_gross=prm.banks_gross, bop_upper=prm.bop_upper, rho_basis=prm.rho_basis, fats_na_level=prm.fats_na_level
             )
         )
     df = pd.concat(rows, ignore_index=True)

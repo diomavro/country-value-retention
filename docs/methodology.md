@@ -57,9 +57,9 @@ corporate tax. It is converted to what accrues to foreign owners:
 fdi_income_k,j = GOS^FATS_k · (1 − c_s − ρ_s) · (1 − τ_t) · θ · σ_{s(k), j}
 ```
 
-- `GOS^FATS_k`: the finest published FATS code covering industry k (`allocate_fats`). A code that covers several industries, or a section's unpublished remainder, is split ∝ B2A3G. A section's published total is conserved, and any leftover is recorded, never dropped.
+- `GOS^FATS_k`: the finest published FATS code covering industry k (`allocate_fats`). A code that covers several industries, or a section's unpublished remainder, is split ∝ B2A3G. A section's total (after the finance cap below) is conserved, and any leftover is recorded, never dropped. The remainder of confidential sections is split as described in §9. **Finance at the national-accounts level.** From 2021, where FATS all-owner operating surplus of finance (K) exceeds the national-accounts operating surplus of K64–K66 (in financial centres business statistics can include holding and fund income), the FATS foreign-controlled share of finance (published, or filled from the confidential remainder on the FATS basis, as in Ireland 2022) is kept and applied to the national-accounts level (`finance_level_factor`, `Params.fats_na_level`). Country shares are computed on the FATS basis and applied to the scaled total; published finance sub-codes are scaled by the same factor. Other sections are never scaled: they differ from the national accounts by definition (for Cyprus, in both directions), so a one-sided cut would bias foreign profit down. The FATS level is a sensitivity variant. Each comparison row records its factor (`finance_level_factor`); it ranges from 0.12 (the Netherlands, 2021: FATS finance 8.6 times the national-accounts level) to 1.
 - `c_s`: consumption of fixed capital per euro of gross operating surplus of the **corporate** sector: S11 for non-financial industries, S12 for finance (`nasa_10_nf_tr`). Industry ratios are not used because industry B2A3G includes self-employed mixed income.
-- `ρ_s`: S11 interest paid (D41, after FISIM, **gross**) per euro of S11 GOS, for non-financial industries only. Interest received is not netted: receipts from abroad are not value generated in Cyprus. The deduction removes interest owed to *all* lenders. The share owed to Cypriot lenders stays in Cyprus. The share owed to foreign third-party lenders is counted once, in the BoP S1V interest lines. The intra-group share s (BoP FDI debt interest / S11 D41 paid, on the same gross basis) goes to `fdi_debt_interest`. Variants: net of receipts, actual interest before FISIM (c + ρ ≥ 1 in 2010–2015, i.e. no profit; 11–29% of surplus left in 2016–2020; close to the central ratio from 2021), and ρ = 0. Ratios by year: `data/processed/interest_ratios.parquet`. For finance ρ = 0 (limitation).
+- `ρ_s`: S11 interest paid (D41, after FISIM, **gross**) per euro of S11 GOS, for non-financial industries only. Interest received is not netted: receipts from abroad are not value generated in Cyprus. The deduction removes interest owed to *all* lenders. The share owed to Cypriot lenders stays in Cyprus. The share owed to foreign third-party lenders is counted once, in the BoP S1V interest lines. The intra-group share s (BoP FDI debt interest / S11 D41 paid, on the same gross basis) goes to `fdi_debt_interest`. Variants: net of receipts, actual interest before FISIM (c + ρ ≥ 1 in 2010–2015, i.e. no profit; 11–29% of surplus left in 2016–2020; above the central ratio in 2021–2022 and below it in 2023), and ρ = 0. Ratios by year: `data/processed/interest_ratios.parquet`. For finance ρ = 0 (limitation).
 - `τ_t`: statutory corporate income tax, 10% to 2012 and 12.5% from 2013. Effective rates are lower, so this deduction is an upper bound on the tax (and the no-tax case is shown).
 - `θ`: the non-resident share of equity in foreign-controlled firms, calibrated in `ownership_data.theta_calibration` as the integrated non-resident share. It traces through Cypriot holdings and stops at the first non-resident owner on every path, over documented foreign-controlled firms, with each group counted once. The value is computed at run time and recorded in `headline_metrics.theta`; the grid 0.6–1.0 is reported.
 - `σ_{s,j}`: UCI economy j's share of section s. It is fitted by iterative proportional fitting: published section × country cells are fixed, rows sum to section totals, and columns sum to the published business-economy country totals, with the unpublished remainder in `CONFIDENTIAL_PARTNERS`. A suppressed economy's total is never assigned to a named country. Within a published country total, suppressed section cells are fitted from published margins; those rows are flagged and carry low confidence (the fit uses only published margins, so it discloses nothing beyond them).
@@ -76,9 +76,9 @@ Central Bank of Cyprus's operational SPE criterion is at most three employees,
 little physical presence or production, control by non-residents, and
 transactions almost entirely with non-residents. The exclusion is a *sector*
 rule. It removes non-SPE insurers, pension and investment funds too, and misses
-SPEs classified elsewhere. Note that the gap between the official outflow and
-this study's estimate is driven mainly by using FATS instead of BoP FDI income,
-and only partly by the SPE rule (see the bridge).
+SPEs classified elsewhere. Most of the gap between the official outflow and
+this study's estimate is income paid by that sector; the rest comes mainly from
+using FATS instead of BoP FDI income (see the bridge).
 
 ### Capping
 
@@ -123,7 +123,7 @@ doubled or mis-scaled):
 - non-resident pay against S2 D1 × (1 − employer SSC share)
 - EU taxes against S2 D2
 - public-debt interest against BoP S13
-- the FATS base of foreign-owned profit against the published FATS total (less owners' losses)
+- the FATS base of foreign-owned profit against the published FATS total, less owners' losses and less the finance surplus above the national-accounts level (recomputed in the validator from the raw FATS and national-accounts files)
 - banks counted exactly once
 - the bridge lines add up
 
@@ -172,8 +172,42 @@ The ownership graph uses NetworkX with edges parent → child and shares
 - **Look-through (who ultimately owns the equity).** `W = S (I − S)^-1` assigns every euro of equity once, cross-holdings included. Undocumented shares go to `UNRESOLVED::<entity>`. An entity with any recorded owner, even one without a published share, is never treated as a terminal owner. Every non-terminal entity must appear in the results (the resolver raises otherwise).
 - **Control (UCI, OECD/FATS concept).** Follow majority holders in the **control graph** (votes where disclosed, equity otherwise), never through dispersed free float, up to a unit nobody controls. A firm with undocumented owners, or one whose majority is held by persons or families of undocumented residence, resolves to `UNRESOLVED`, never to its own country.
 - **Income rights.** Voting disclosures count as economic stakes (one share, one vote) unless equity and voting stakes in the same firm exceed 100%, which reveals separated rights.
-- **Residence.** A natural person's country is `UNRESOLVED` unless residence is documented; nationality is never used. A legal entity is resident where it is incorporated (BPM6): the holding company of Bank of Cyprus is incorporated in Ireland, so at company level Bank of Cyprus is Irish-controlled. FATS does not publish Ireland as an ultimate controlling economy in these years, so the aggregate accounting cannot show it.
+- **Residence.** A natural person's country is `UNRESOLVED` unless residence is documented; nationality is never used. A legal entity is resident where it is incorporated (BPM6): the holding company of Bank of Cyprus is incorporated in Ireland, so at company level Bank of Cyprus is Irish-controlled. FATS flags some Irish cells as confidential in 2021–2023 (finance included), so the aggregate accounting keeps Irish-controlled surplus in `CONFIDENTIAL_PARTNERS` and cannot show it by name. The published EU totals show that all confidential EU controllers of finance together hold €40–92m a year, net (2021–2023); that caps Irish-controlled finance only if none of the other confidential cells is negative.
 - **Data corrections** are applied by `data/raw/companies/_build/corrections.py`, which documents each one.
 
 The firm layer calibrates θ and illustrates chains. Headline results use the
 official aggregates, because firm coverage is partial.
+
+## 9. Other countries (`src/cvr/compare.py`)
+
+The same Frame A estimator runs for Ireland, Luxembourg, the Netherlands, Greece and Portugal, and tries Malta.
+Nothing in the method changes.
+Only the sources differ:
+
+| Input | Cyprus | Other countries |
+|---|---|---|
+| Rest-of-world account, GDP, GNI | CYSTAT sector accounts | Eurostat `nasa_10_nf_tr` (S2 "received" = paid by the country) |
+| Industry accounts, FATS, BoP by sector, BoP compensation | Eurostat (`data/raw/eurostat`) | Eurostat (`data/raw/eurostat_eu`) |
+| Statutory corporate tax rate τ | Income Tax Law | OECD combined statutory rate (`data/raw/oecd`) |
+| θ (non-resident share of foreign-controlled equity) | calibrated from filings | **assumed**: the Cyprus value, and θ = 1 |
+
+**Why the Cyprus result can be trusted to travel.** Run on Cyprus with the Eurostat sector accounts, the estimator reproduces the CYSTAT-based result: every mechanism agrees within €1m, the rounding gap between the two publications (`tests/test_country_frame.py`).
+Every Eurostat read is filtered on the country code, so files for one country can never enter another's estimate (tested).
+
+**θ is not observed outside Cyprus.** The ownership filings that calibrate θ exist only for Cyprus.
+Each other country is shown twice: at the Cyprus θ, labelled `assumed`, and at θ = 1, where all profit of foreign-controlled firms belongs to non-residents and retention is lowest.
+The two differ by less than 3 points of GDP in every country-year, because θ scales only the foreign-owned-profit line.
+
+**Suppressed data is skipped or coarsened, never filled in from outside the published totals.**
+
+- *Industries.* If a country suppresses one industry of a section (Ireland's pharmaceuticals, Luxembourg's manufacturing divisions), the whole section becomes one row taken from the published section total. GDP still closes, and FATS profit for that section lands on that one row. Ireland publishes only the value added of imputed rent, so its real-estate section (L) is also one row, and households' mortgage interest is booked to it.
+- *Malta* publishes neither mining (B) nor energy (D) in any year, only B–E together. The estimator places profit section by section, so Malta is skipped rather than split by assumption.
+- *FATS.* A year whose foreign-controlled total is confidential (Luxembourg 2021–2022, the Netherlands 2019) or whose FATS variables are missing (Greece 2010–2011, Ireland 2013) is skipped. `data/processed/comparison_skipped.parquet` lists every skipped country-year with its reason.
+- *BoP by resident sector.* A suppressed item that is paid abroad is omitted, which overstates retention; a suppressed bank receipt cannot be netted, which understates it. Each row names its gaps in plain words in `missing_lines`. The gaps are large for Luxembourg in every year (loan and deposit interest, intra-group interest and portfolio dividends of firms; foreign-owned banks' profit before 2021) and for Ireland and Luxembourg in 2010–2011, when almost every line is suppressed. Ireland's fall in retention from 2011 to 2012 is therefore mostly missing data.
+- *Confidential sections.* The unpublished foreign-controlled remainder is split across the confidential sections by their FATS all-owner operating surplus. Where that is suppressed too, the section is weighted by its national-accounts operating surplus, rescaled to the FATS level of the sections where both are published (`remainder_weights`). This applies in every country, Cyprus included (energy, and mining in some years). Real estate is weighted without the imputed rent of owner-occupiers, which no firm earns (`market_gos`). A zero weight had put Ireland's entire 2020 remainder on mining.
+
+**Reading the comparison.** Leakage in a hub economy is not one thing.
+In Luxembourg most of it is pay to cross-border commuters, who are non-residents.
+In Ireland it is the profit of foreign-controlled manufacturing and ICT firms.
+In Greece interest on public debt held abroad is the largest line in most years.
+The same FATS break in 2021 (finance enters) applies to every country, and it is large in the hubs: most of Luxembourg's fall from 2020 to 2023 is foreign-owned finance entering the data, and part of Ireland's fall from 2022 to 2023 is portfolio dividends published for the first time (`missing_lines`).

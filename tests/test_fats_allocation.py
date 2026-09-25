@@ -60,3 +60,16 @@ def test_ipf_never_inflates_published_cells():
     assert sh.loc["J", "US"] * 100 == pytest.approx(40.0)
     assert sh.loc["J", "EL"] * 100 == pytest.approx(30.0)
     assert sh.loc["J"].sum() == pytest.approx(1.0)
+
+
+def test_suppressed_weight_sections_still_receive_a_share():
+    # Why: when FATS suppresses a section's all-owner surplus too, weighting it by zero pushed its
+    # share onto the other confidential sections (Ireland 2020: EUR 70bn landed on mining).
+    from cvr.model.frame_a import remainder_weights
+
+    fats_all = pd.Series({"B": 10.0, "G": float("nan"), "J": 30.0})
+    na_gos = pd.Series({"B": 20.0, "G": 100.0, "J": 60.0})
+    w = remainder_weights(fats_all, na_gos)
+    assert w["B"] == 10.0 and w["J"] == 30.0  # published FATS weights are kept
+    assert w["G"] == pytest.approx(100.0 * 40.0 / 80.0)  # NA surplus on the FATS scale of B and J
+    assert remainder_weights(pd.Series({"B": 5.0}), pd.Series({"B": 1.0}))["B"] == 5.0  # no gap: untouched

@@ -1,0 +1,2 @@
+file,dataset_code,dataset_title,provider,url,download_date,sha256,rows
+data/raw/oecd/cit_rates.csv,DSD_TAX_CIT@DF_CIT,Corporate income tax (CIT) - statutory and targeted small business rates,OECD,"https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_TAX_CIT@DF_CIT,/IRL+LUX+NLD+GRC+PRT+MLT........?startPeriod=2010&format=csvfilewithlabels",2026-09-24,1d54574f74afb9761e0f8fa3ca5cadf368f58328e53f5c49ee2c5a767b1fee91,509

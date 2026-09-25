@@ -11,9 +11,12 @@ Contributions are welcome, especially new countries, better sources and correcti
 
 ## Adding a country
 
-1. `python -m cvr.ingest.eurostat --geo <CC>` downloads the Eurostat inputs.
-2. Replace the CYSTAT-specific sector-account loader with `nasa_10_nf_tr` (rest-of-world sector S2), and the SIOT loader with `naio_10_cp1700` (domestic and imported blocks).
-3. Run `make model validate` and add a reconciliation check for the country's GDP and GNI.
+Frame A already runs for other EU countries from Eurostat (`src/cvr/compare.py`, methodology §9).
+
+1. Add the country code in five places: the `--geo` list of the comparison download in the `Makefile`; `COUNTRIES` in `src/cvr/compare.py`; the OECD tax-rate query in `src/cvr/ingest/oecd.py` and its code map in `frame_a._oecd_cit` (every country other than Cyprus needs a statutory rate); `COUNTRY_NAMES` in `src/cvr/paper_tables.py`; and `COUNTRIES` in `website/src/components/CompareView.tsx`.
+2. Changing the `--geo` list writes new file names; delete the old files in `data/raw/eurostat_eu/` and their manifest rows first (the estimator stops if two files disagree). Then run `make ingest process` and `python -m cvr.compare`. Suppressed inputs are reported in `data/processed/comparison_skipped.parquet`; do not fill them in.
+3. Update the prose that names the comparison countries (the `src/cvr/compare.py` docstring, the introduction in `CompareView.tsx`, the country list in `src/cvr/paper_numbers.py` and the paper section), then run `make paper dashboard`.
+4. θ stays an assumption unless you add the country's ownership filings. Frame B (input–output) is still Cyprus-only.
 
 ## Correcting ownership data
 

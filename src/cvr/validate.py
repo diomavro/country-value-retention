@@ -187,13 +187,16 @@ def checks() -> list[tuple[str, bool, str]]:
         # FATS: the pre-conversion base of all FATS rows equals the published foreign-controlled
         # total less owners' losses (sections or sub-codes with negative surplus)
         f = ty[(ty.mechanism == "fdi_income") & ty.gross_base.notna()]
-        g = frame_a.fats_foreign_gos(int(y))
+        g = frame_a.fats_foreign_gos(int(y), na_level=frame_a.Params().fats_na_level)
         losses = float(-g["sections"].clip(upper=0).sum())
         diag = m.set_index("year").loc[y, "negative_fats_sections"]
         sub_losses = sum(-v for k, v in __import__("json").loads(diag).items() if len(k) > 1 and v < 0)
-        lo, hi = g["total"] - 0.05, g["total"] + losses + sub_losses + 0.05
+        # less what the finance NA-level rule removed, recomputed here from the raw FATS and national
+        # accounts files (not taken from the model's own function)
+        expect = g["total"] - _finance_level_removed(int(y))
+        lo, hi = expect - 0.05, expect + losses + sub_losses + 0.05
         if not (lo <= f.gross_base.sum() <= hi):
-            fails["fats"].append((int(y), round(f.gross_base.sum(), 1), round(g["total"], 1)))
+            fails["fats"].append((int(y), round(f.gross_base.sum(), 1), round(expect, 1)))
         # banks counted exactly once: BoP bank FDI rows (no gross_base) only before 2021
         bop_bank = ty[(ty.mechanism == "fdi_income") & (ty.industry == "K64") & ty.gross_base.isna()]
         if (y >= 2021 and len(bop_bank)) or (y < 2021 and not len(bop_bank)):
@@ -322,6 +325,21 @@ def checks() -> list[tuple[str, bool, str]]:
         f"jumps >50% in foreign-owned surplus: {flagged}; undocumented: {undocumented} (each must have a KNOWN_BREAKS entry)",
     )
     return out
+
+
+def _finance_level_removed(y: int) -> float:
+    """Foreign-controlled finance surplus above the national-accounts level, from raw files."""
+    if y < 2021 or not frame_a.Params().fats_na_level:
+        return 0.0
+    d = frame_a._one("fats_activ__*.parquet")
+    d = d[(d.TIME_PERIOD.astype(int) == y) & (d.indic_sbs == "GOS_MEUR") & (d.nace_r2 == "K")].set_index("c_ctrl")["OBS_VALUE"]
+    world, foreign = d.get("WORLD", float("nan")), d.get("WRL_REST", float("nan"))
+    n = frame_a._nama()
+    n = n[(n.TIME_PERIOD == y) & n.nace_r2.isin(["K64", "K65", "K66"]) & n.na_item.isin(["B2A3N", "P51C"])]
+    na_k = float(n.OBS_VALUE.sum())
+    if not (world > na_k > 0) or pd.isna(foreign):
+        return 0.0
+    return float(foreign) * (1 - na_k / world)
 
 
 def main() -> int:

@@ -574,6 +574,59 @@ def main() -> None:
         _dump(
             W.parent / "catalogue.json", pd.read_csv(cat).fillna("").to_dict("records")
         )
+    cmp_path = P / "comparison.parquet"
+    if cmp_path.exists():
+        cr = pd.read_parquet(cmp_path)
+        wide = cr.pivot_table(index=["geo", "year"], columns="variant", values="domestic_value_retention")
+        c = cr[cr.variant == "theta_cyprus"].set_index(["geo", "year"])
+        shares = [k for k in c.columns if k.startswith("share_")]
+        _dump(
+            W.parent / "compare.json",
+            {
+                "countries": [
+                    {
+                        "geo": g,
+                        "rows": [
+                            {
+                                "year": int(y),
+                                "dvr": wide.loc[(g, y), "theta_cyprus"],
+                                "dvr_theta_1": wide.loc[(g, y), "theta_1"],
+                                "official_outflow": c.loc[(g, y), "primary_income_outflow_to_gdp"],
+                                "theta": c.loc[(g, y), "theta"],
+                                "theta_status": c.loc[(g, y), "theta_status"],
+                                "tau": c.loc[(g, y), "tau"],
+                                "missing_lines": c.loc[(g, y), "missing_lines"],
+                                "incomplete": [m for m in c.loc[(g, y), "incomplete_mechanisms"].split(",") if m],
+                                "collapsed_sections": c.loc[(g, y), "collapsed_sections"],
+                                "shares": {k.removeprefix("share_"): c.loc[(g, y), k] for k in shares},
+                            }
+                            for y in sorted(c.loc[g].index)
+                        ],
+                    }
+                    for g in c.index.get_level_values("geo").unique()
+                ],
+                "skipped": pd.read_parquet(P / "comparison_skipped.parquet").to_dict("records"),
+                # suppressed BoP lines, each with the years it is missing
+                "gaps": [
+                    {"geo": g, "line": line, "years": sorted(int(y) for y in ys)}
+                    for (g, line), ys in (
+                        c.reset_index()
+                        .assign(line=lambda x: x.missing_lines.str.split("; "))
+                        .explode("line")
+                        .query("line != ''")
+                        .groupby(["geo", "line"], sort=False)
+                        .year
+                    )
+                ],
+                "prov": {
+                    "status": "estimated",
+                    "confidence_level": "low",
+                    "source": "Eurostat nasa_10_nf_tr, nama_10_a64, fats_activ, fats_g1a_08, bop_c6_a, bop_rem6; OECD Corporate Tax Statistics; CYSTAT for Cyprus",
+                    "source_url": "https://ec.europa.eu/eurostat/databrowser/view/nasa_10_nf_tr/default/table",
+                    "methodology": "Frame A with the Cyprus method (src/cvr/compare.py); theta calibrated for Cyprus, assumed elsewhere; suppressed inputs skipped or coarsened, never filled in from outside the published totals",
+                },
+            },
+        )
     _dump(
         W.parent / "names.json",
         {"industries": INDUSTRY_NAMES, "recipients": RECIPIENT_NAMES},
