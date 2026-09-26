@@ -287,7 +287,7 @@ def fig_input_exposure():
 
 def fig_sensitivity():
     s = pd.read_parquet(P / "sensitivity.parquet")
-    s = s[(~s.include_ofc) & (~s.consistent_scope) & (~s.banks_gross) & (~s.bop_upper) & (s.rho_basis == "d41_gross") & s.fats_na_level & (s.year.isin([2022, 2023]))]
+    s = s[(~s.include_ofc) & (~s.consistent_scope) & (~s.banks_gross) & (~s.bop_upper) & (s.rho_basis == "d41_gross") & s.fats_na_level & s.tax.isin(["statutory", "none"]) & (s.year.isin([2022, 2023]))]
     assert not s.duplicated(["year", "tax", "theta"]).any(), "sensitivity figure: a variant leaked into the theta grid"
     fig, ax = plt.subplots(figsize=(6.3, 2.8))
     i = 0

@@ -12,6 +12,8 @@ ingest:            ## download official sources (CYSTAT PxWeb, Eurostat API, CBC
 	$(UV) python -m cvr.ingest.eurostat --geo MT,IE,LU,NL,EL,PT --raw-dir data/raw/eurostat_eu --no-eu-aggregate \
 		--only gva_a64,sector_nf,bop_pi_sector,bop_rem,fats_activ,fats_g1a_08
 	$(UV) python -m cvr.ingest.oecd
+	$(UV) python -m cvr.ingest.ec_taxation
+	$(UV) python -m cvr.ingest.ecb
 	$(UV) python -m cvr.ingest.cbc
 
 process:           ## verify raw files against manifest checksums, then parse -> data/interim

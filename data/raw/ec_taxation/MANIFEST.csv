@@ -1,0 +1,2 @@
+file,dataset_code,dataset_title,provider,url,download_date,sha256,rows
+data/raw/ec_taxation/effective_tax_rates.xlsx,effective_tax_rates,"Effective average tax rates, non-financial sector (Taxation Trends)",European Commission DG TAXUD,https://taxation-customs.ec.europa.eu/document/download/3f815f4c-5bc1-4eac-9a5a-83310b75dc72_en | https://taxation-customs.ec.europa.eu/taxation/economic-analysis/data-taxation-trends_en,2026-09-26,7d1189c0ea3744a0eacee929643a63a69ca9d5f4d29bf76659d12c03efc94936,377

@@ -1,0 +1,2 @@
+file,dataset_code,dataset_title,provider,url,download_date,sha256,rows
+data/raw/ecb/cbd2_bank_profit.csv,CBD2,"Consolidated banking data: profit or loss for the year, banks in Cyprus",European Central Bank,https://data-api.ecb.europa.eu/service/data/CBD2/A.CY.W0.11._Z._Z.A.A.P0000._X.ALL.CP._Z.T._T.EUR?format=csvdata | https://data-api.ecb.europa.eu/service/data/CBD2/A.CY.W0.67._Z._Z.A.A.P0000._X.ALL.CP._Z.T._T.EUR?format=csvdata,2026-09-26,ef84039d361e8bf4f50a7f3daba1f5d6274280675ea91748800dd2a4912c0ac1,38

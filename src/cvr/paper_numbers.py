@@ -129,6 +129,13 @@ def main() -> None:
     put("RecUnknownEUR", eur(rec_[rec_.index.isin(unknown)].sum()))
     put("RecUnknownShare", pct(rec_[rec_.index.isin(unknown)].sum() / rec_.sum(), 0))
     put("RecConfEUR", eur(rec_.get("CONFIDENTIAL_PARTNERS", 0)))
+    # EU / non-EU split of the assignable outflow (ultimate controller's country; OFFSHO holds no EU member)
+    eu27 = set("AT BE BG CZ DE DK EE EL ES FI FR HR HU IE IT LT LU LV MT NL PL PT RO SE SI SK".split())
+    is_eu = rec_.index.isin(eu27 | {"EU_INST", "EU27_UNALLOCATED"})
+    put("RecEUShare", pct(rec_[is_eu].sum() / rec_.sum(), 0))
+    no_region = rec_.index.isin({"CONFIDENTIAL_PARTNERS", "WORLD_UNALLOCATED"})
+    put("RecExtraEUShare", pct(rec_[~is_eu & ~no_region].sum() / rec_.sum(), 0))
+    assert abs(rec_[is_eu].sum() + rec_[~is_eu & ~no_region].sum() + rec_[no_region].sum() - rec_.sum()) < 1e-6
     put("RecWorldEUR", eur(rec_.get("WORLD_UNALLOCATED", 0)))
     wu = t[(t.recipient == "WORLD_UNALLOCATED")].groupby("year").value.sum()
     put("WorldUnallocMin", eur(wu.min()))
@@ -236,7 +243,7 @@ def main() -> None:
     put("PlatLabour", f"{ex['cyprus_labour_platform']:.2f}")
 
     # sensitivity, last year: theta x tax (central scope), and the full envelope of all variants
-    s = sens[(sens.year == L) & (~sens.include_ofc) & (~sens.consistent_scope) & (~sens.banks_gross) & (~sens.bop_upper) & (sens.rho_basis == "d41_gross") & sens.fats_na_level]
+    s = sens[(sens.year == L) & (~sens.include_ofc) & (~sens.consistent_scope) & (~sens.banks_gross) & (~sens.bop_upper) & (sens.rho_basis == "d41_gross") & sens.fats_na_level & sens.tax.isin(["statutory", "none"])]
     th = s[s.tax == "statutory"].set_index("theta").domestic_value_retention
     assert not th.index.duplicated().any(), "theta grid: more than one row per theta (a variant leaked in)"
     put("SensThetaSpreadPP", f"{100 * (th.max() - th.min()):.1f}")
@@ -251,6 +258,7 @@ def main() -> None:
     put("SensBopUpperDVR", pct(one(**{**base, "bop_upper": True})))
     put("SensBanksGrossDVR", pct(one(**{**base, "banks_gross": True})))
     put("SensNoTaxDVR", pct(one(**{**base, "tax": "none"})))
+    put("SensEatrDVR", pct(one(**{**base, "tax": "eatr"})))
     put("SensFatsLevelDVR", pct(one(**{**base, "fats_na_level": False})))
     put("SensRhoNoneDVR", pct(one(**{**base, "rho_basis": "none"})))
     put("SensRhoGrossDVR", pct(one(**{**base, "rho_basis": "d41g_gross"})))
@@ -282,6 +290,12 @@ def main() -> None:
     put("InsAuxShareFirstFats", pct(k_fdi(2021, ["K65", "K66"]) / m.loc[2021, "gdp"]))
     from .model.frame_a import fats_foreign_gos
 
+    from .ingest.ecb import bank_profit
+
+    bp = bank_profit().loc[L]  # ECB consolidated banking data, profit for the year
+    put("ECBBankAllLast", eur(bp["all"]))
+    put("ECBBankDomLast", eur(bp["domestic"]))
+    put("ECBBankForLast", eur(bp["foreign_controlled"]))
     put("FATSPublishedLast", bn(fats_foreign_gos(L)["total"], 2))  # as published, before the finance cap
 
     # upper bound on Irish-controlled finance: published EU-controlled K less the published EU member cells
@@ -306,6 +320,12 @@ def main() -> None:
 
     put("ConfFatsLow", pct(conf("fats_g1a_08__*.parquet"), 0))
     put("ConfFatsHigh", pct(conf("fats_activ__*.parquet"), 0))
+    # bounds on outflows the model does not book (limitation 1): inward FDI income, all partners
+    fi = _one("bop_fdi6_inc__*.parquet")
+    fi = fi[(fi.fdi_item == "DI__D4P__D__F") & (fi.partner == "WRL_REST") & (fi.stk_flow == "II") & (fi.TIME_PERIOD.astype(int) <= L)]
+    re_ = fi[(fi.nace_r2 == "L") & (fi.entity == "TOTAL")].OBS_VALUE.dropna()
+    put("RealEstateFdiAbsMax", eur(re_.abs().max()))
+    put("RealEstateFdiFirstYear", str(int(fi[fi.nace_r2 == "L"].TIME_PERIOD.astype(int).min())))
     put("ConfFdi", pct(conf("bop_fdi6_inc__*.parquet", None, L), 0))
     put("BanksPaidFirst", eur(m.loc[first, "banks_interest_paid"]))
     put("BanksRecvFirst", eur(m.loc[first, "banks_interest_received"]))

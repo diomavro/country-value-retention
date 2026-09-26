@@ -24,14 +24,14 @@ def is_model_input(p: Path) -> bool:
     """Only files the model reads must exist; reference downloads may be absent in a clone."""
     if p.parent.name == "cystat":
         return re.fullmatch(r"06\d{5}E(_CP|_PYP)?\.xlsx", p.name) is not None
-    if p.parts[:3] in {("data", "raw", "eurostat_eu"), ("data", "raw", "oecd")}:
-        return True  # comparison countries (cvr.compare)
+    if p.parts[:3] in {("data", "raw", "eurostat_eu"), ("data", "raw", "oecd"), ("data", "raw", "ec_taxation"), ("data", "raw", "ecb")}:
+        return True  # comparison countries, OECD/EC tax rates, ECB bank profit
     return p.parts[:3] == ("data", "raw", "eurostat") and "figaro" not in p.parts
 
 
 def main() -> int:
     changed, missing, optional, ok = [], [], [], 0
-    for sub in ("cystat", "eurostat", "cbc", "eurostat_eu", "oecd"):
+    for sub in ("cystat", "eurostat", "cbc", "eurostat_eu", "oecd", "ec_taxation", "ecb"):
         man = RAW / sub / "MANIFEST.csv"
         if not man.exists():
             missing.append(str(man))

@@ -1,6 +1,6 @@
 {
   "model_version": "0.1.0",
-  "run_date": "2026-09-25",
+  "run_date": "2026-09-26",
   "tables": {
     "recipient_tensor": 17067,
     "headline_metrics": 14,
@@ -9,7 +9,7 @@
     "frame_b_economy": 904,
     "io_indicators": 845,
     "comparators": 12,
-    "sensitivity": 770,
+    "sensitivity": 784,
     "bridge": 154,
     "interest_ratios": 14,
     "reconciliation": 55,

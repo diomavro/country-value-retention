@@ -55,7 +55,7 @@ STATUTORY_CIT = {y: (0.10 if y <= 2012 else 0.125) for y in range(2008, 2026)}
 @dataclass(frozen=True)
 class Params:
     theta: float | None = None  # non-resident equity share; None = calibrated value (ownership_data.theta_central)
-    tax: str = "statutory"  # "statutory" or "none"
+    tax: str = "statutory"  # "statutory", "none", or "eatr" (EC forward-looking effective rate; variant)
     include_ofc: bool = False  # sensitivity: include S12M (SPE-dominated) outflows
     consistent_scope: bool = False  # FATS sections B-N only in every year, banks via BoP -> no 2021 break
     banks_gross: bool = False  # sensitivity: banks' non-FDI interest paid abroad gross, not net of receipts
@@ -594,7 +594,7 @@ def m2_foreign_owned(year: int, na: pd.DataFrame, prm: Params) -> tuple[list[dic
     sec, codes = f["sections"], f["codes"]
     shares = section_country_shares(f["sections_fats"], f["col_totals"], f["cells"])  # on the FATS basis
     published_cell = f["cells"].reindex(index=shares.index, columns=shares.columns).notna()
-    tau = statutory_cit(year) if prm.tax == "statutory" else 0.0
+    tau = tax_rate(year, prm.tax)
     cr = corporate_ratios(year, prm.rho_basis)
     by_ind, used, losses = allocate_fats(sec.clip(lower=0), codes, na)
     diag = {
@@ -831,6 +831,31 @@ def calibrated_theta() -> float:
     from .ownership_data import theta_central
 
     return round(theta_central(), 3)
+
+
+GEO_NAMES = {"CY": "Cyprus", "IE": "Ireland", "LU": "Luxembourg", "NL": "Netherlands", "EL": "Greece", "PT": "Portugal", "MT": "Malta"}
+
+
+# Before 2017 the Cyprus EATR (1.6-2.2 times the statutory rate in 2012-2016) appears to include taxes on
+# immovable property, abolished in 2017, which the accounts already deduct: using it would deduct them twice.
+EATR_FROM = 2017
+
+
+def tax_rate(year: int, basis: str) -> float:
+    """tau: statutory rate (central), none, or the EC effective average tax rate where published
+    (from EATR_FROM; statutory before).  The EATR describes a hypothetical new investment, so it is a
+    variant, not a measurement of tax paid on existing profits."""
+    if basis == "none":
+        return 0.0
+    if basis == "eatr":
+        from ..ingest.ec_taxation import eatr
+
+        s = eatr()
+        key = (GEO_NAMES[_GEO], year)
+        return float(s[key]) if key in s.index and year >= EATR_FROM else statutory_cit(year)
+    if basis == "statutory":
+        return statutory_cit(year)
+    raise ValueError(basis)
 
 
 def statutory_cit(year: int) -> float:

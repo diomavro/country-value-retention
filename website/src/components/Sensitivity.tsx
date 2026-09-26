@@ -20,6 +20,7 @@ export default function Sensitivity({ rows, headlineTheta }: { rows: SensRow[]; 
           !r.banks_gross &&
           !r.bop_upper &&
           r.rho_basis === 'd41_gross' &&
+          r.tax !== 'eatr' &&
           r.fats_na_level !== false,
       ), [rows, year, ofc, scope]);
   const thetas = [...new Set(sel.map((r) => r.theta))].sort();

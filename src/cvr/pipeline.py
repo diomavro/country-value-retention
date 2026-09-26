@@ -194,21 +194,33 @@ def io_indicators() -> pd.DataFrame:
     return df
 
 
-def sensitivity() -> pd.DataFrame:
-    """Grid over theta x tax x SPE-sector x scope, plus one-at-a-time upper-bound variants."""
+ONE_AT_A_TIME = [
+    dict(banks_gross=True),
+    dict(fats_na_level=False),
+    dict(tax="eatr"),
+    dict(bop_upper=True),
+    dict(rho_basis="none"),
+    dict(rho_basis="d41_net"),
+    dict(rho_basis="d41g_gross"),
+]
+# every assumption at the end that lowers retention, at once
+WORST_CASE = dict(banks_gross=True, bop_upper=True, include_ofc=True, consistent_scope=True, tax="none", theta=1.0, rho_basis="none", fats_na_level=False)
+
+
+def sensitivity_grid() -> list:
+    """theta x tax x SPE-sector x scope, then one-at-a-time variants and the combined worst case."""
     grid = [
         frame_a.Params(theta=th, tax=tx, include_ofc=ofc, consistent_scope=cons)
         for th, tx, ofc, cons in itertools.product([0.6, 0.7, 0.8, 0.9, frame_a.calibrated_theta(), 1.0], ["statutory", "none"], [False, True], [False, True])
     ]
-    grid += [
-        frame_a.Params(banks_gross=True),
-        frame_a.Params(fats_na_level=False),
-        frame_a.Params(bop_upper=True),
-        frame_a.Params(rho_basis="none"),
-        frame_a.Params(rho_basis="d41_net"),
-        frame_a.Params(rho_basis="d41g_gross"),
-        frame_a.Params(banks_gross=True, bop_upper=True, include_ofc=True, tax="none", theta=1.0, rho_basis="none", fats_na_level=False),
-    ]
+    grid += [frame_a.Params(**kw) for kw in ONE_AT_A_TIME]
+    grid.append(frame_a.Params(**WORST_CASE))
+    return grid
+
+
+def sensitivity() -> pd.DataFrame:
+    """Frame A re-run over `sensitivity_grid()`."""
+    grid = sensitivity_grid()
     rows = []
     for prm in grid:
         _, m = run_frame_a(prm)

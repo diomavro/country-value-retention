@@ -23,12 +23,12 @@ Items marked **agent** can be done from public data in this repository; items ma
 
 | # | Item | Data | Done when | Who |
 |---|---|---|---|---|
-| C1 | **All EU27 countries** in the comparison | Eurostat (same datasets, `--raw-dir data/raw/eurostat_eu`) | Comparison and map for every country whose inputs are published; skipped country-years listed | agent (needs disk space, see H1) |
+| C1 | **All EU27 countries** in the comparison | Eurostat (same datasets, `--raw-dir data/raw/eurostat_eu`) | Comparison and map for every country whose inputs are published; skipped country-years listed | agent (Frame A inputs are about 1–2 MB per country; 7.7 MB for the six comparison countries) |
 | C2 | **Malta** | `nama_10_a64` B–E aggregate | Mining and energy handled as one merged section; Malta in the comparison | agent |
 | C3 | **Frame B (input–output) for other countries** | Eurostat `naio_10_cp1700` symmetric tables | Per-euro decomposition for each comparison country | agent |
 | C4 | **Value-added origin of imports** (not only the direct supplier) | FIGARO full inter-country tables | Imported value added traced to the country that produced it | agent (needs disk space, see H1) |
 | C5 | **θ for other countries** | GLEIF parent relationships; OECD AMNE database | θ calibrated per country, not borrowed from Cyprus | agent |
-| C6 | **Luxembourg interest lines** | STATEC / BCL sector BoP (to be checked) | Luxembourg's suppressed lines filled from an official national source, or confirmed unavailable | agent (check), human if a request is needed |
+| C6 | **Luxembourg interest lines** | BCL publishes financial flows by sector (tables 07.05, 07.07) but no investment income by resident sector (checked 2026-09-26) | Suppressed lines obtained on request | human (H8) |
 
 ## Reliability and reuse
 
@@ -45,20 +45,31 @@ Items marked **agent** can be done from public data in this repository; items ma
 
 | # | What | Why | Unblocks |
 |---|---|---|---|
-| H1 | **Free disk space** (the disk is 96% full, about 9 GB left) | EU27 downloads and FIGARO tables need several GB; a full disk corrupts downloads | C1, C4 |
+| H1 | **Free disk space** (the disk is 96% full, about 9 GB left) | FIGARO tables need several GB; a full disk corrupts downloads | C4 |
 | H2 | **Email the Central Bank of Cyprus statistics department** asking for (a) the BoP excluding SPEs by sector and item, (b) investment income by sector and partner country, 2010–2023 | Only they hold it; a request from a named researcher is more likely to succeed | A8, A10 |
 | H3 | **Apply for Eurostat/CYSTAT research access** to confidential FATS (through Milestone Institute) | Removes the fitted industry × country cells | A9 |
 | H4 | **Link Zenodo to the GitHub account** (one click at zenodo.org, GitHub login) | Issues a DOI on each release | R5 |
 | H5 | **Decide the SEC EDGAR contact** if US parent filings are used: EDGAR requires a User-Agent with a contact email | Your email is kept out of the repository; you choose what goes in the header | A4 (US parents) |
 | H6 | **Optional: Orbis / BvD access** through a library, if Milestone has it | Best source for ownership shares; paid | A4, C5 |
 | H7 | **Name one or two statisticians** to review | Outside check on the method | R6 |
+| H8 | **Email the BCL statistics team (stat@bcl.lu)** for Luxembourg's investment income paid by resident sector, 2010–2023 | Not published; Eurostat marks it confidential | C6 |
+
+## Done (2026-09-26)
+
+Some items closed differently from their original target; the table rows above state the target.
+
+- **A1, closed as a variant:** the effective rate on actual profits cannot be taken from the national accounts in hubs (firms' income tax also taxes income earned abroad). The central estimate keeps the statutory rate; the EC forward-looking effective rate is a sensitivity variant from 2017.
+- **A2, A3, bounded rather than booked:** recorded real-estate FDI income, net of reverse investment, is about €12m a year or less in absolute value; minority stakes cannot be separated from pass-through by holding companies, and the balance-of-payments variant bounds both.
+- **A5, not closed:** the ECB's consolidated banking data split bank profit into domestic and foreign-controlled groups; they are consistent with one explanation of the bank gap in 2023 but do not settle it. The gap remains.
+- **A6, partly:** the paper reports EU / non-EU shares of the whole outflow; a recipient table by region for FDI income is still open.
+- **R1, partly:** a test fails when one of the figures it lists in README or docs drifts from the generated data; figures not on its list are unchecked.
+- **R2:** the sensitivity grid's variants, worst case and completeness are tested.
 
 ## Order of work
 
-1. A1, A2, A6 (data already downloaded; each changes or bounds a headline number).
-2. R1, R2 (stop regressions before the numbers move again).
-3. A4, A5, A3 (need new public data; moderate effort).
-4. C2, C1, C3 (coverage; C1 after H1).
-5. A7 when the 2024 data are complete; A8–A10 when H2/H3 come back.
+1. A6 recipient table by region; R1 coverage of remaining doc figures.
+2. A4 (θ weighting), A5 (bank gap: banks' annual reports).
+3. C2, C1, C3 (coverage; C4 after H1).
+4. A7 when the 2024 data are complete; A8–A10 when H2/H3 come back.
 
 Every item goes through the same loop as the release: build, validator, adversarial review rounds until one finds nothing significant, then commit.

@@ -398,6 +398,8 @@ Three explanations are possible, and published data cannot separate them; the ti
 FATS may treat Bank of Cyprus as domestically controlled, while the balance of payments treats all its profit as income of its Irish holding company.
 The balance of payments also includes 10--50\% stakes, which FATS does not.
 And the two sources may record provisions differently.
+The ECB's consolidated banking data are consistent with the first explanation in \LastYear{}: all banks in Cyprus earned \EUR\ECBBankAllLast~m after tax, \EUR\ECBBankDomLast~m in domestic banking groups and \EUR\ECBBankForLast~m in foreign-controlled subsidiaries and branches, and the balance-of-payments figure is close to the profit of all banks.
+This is weak evidence: in every year from 2013 to 2022 except 2018 the balance-of-payments figure exceeds the profit of all banks, consolidated group profit and FDI income differ in scope, and our FATS-based figure is above the ECB's foreign-controlled profit, so the data do not settle the question.
 The central estimate uses FATS, the same source as every other industry, from 2021, and the balance of payments before 2021, when FATS does not cover finance: the series splices two sources that disagree in \LastYear{}.
 The consistent-scope series (\DVRConsLast{} retention in \LastYear{}) uses the balance of payments throughout, and shows the same post-2020 decline.
 
@@ -438,6 +440,7 @@ The published EU-controlled total less the published EU member cells shows that 
 We never assign a suppressed economy's total to a named country.
 Within a country's published total, however, the split across sections is fitted where the section cell is suppressed; those rows are flagged as fitted and carry low confidence.
 \EUR\RecUnknownEUR~m (\RecUnknownShare) cannot be assigned.
+Of the whole outflow, \RecEUShare{} goes to other EU countries and EU institutions and \RecExtraEUShare{} outside the EU.
 \EUR\RecConfEUR~m is suppressed for confidentiality, and \EUR\RecWorldEUR~m is interest paid by firms, households and the government that the balance of payments publishes only as a world total.
 
 \section{Value chains: where does a euro of spending go?}
@@ -492,6 +495,7 @@ The example is illustrative and is not part of any headline number.
 \Cref{fig:sens} varies the two unobserved parameters.
 Moving $\theta$ from 0.6 to 1 changes \LastYear{} retention by \SensThetaSpreadPP{} percentage points.
 Not deducting corporate tax gives \SensNoTaxDVR{}.
+Using, from 2017, the European Commission's forward-looking effective tax rate on a new investment instead of the statutory rate gives \SensEatrDVR{}; earlier values appear to include taxes on immovable property (abolished in 2017), which the accounts already deduct.
 Using the FATS level of foreign-controlled finance surplus where it exceeds the national accounts gives \SensFatsLevelDVR{}.
 Not deducting interest from foreign-controlled surplus gives \SensRhoNoneDVR{}; deducting interest net of receipts gives \SensRhoNetDVR{}; deducting actual interest before the bank-services adjustment gives \SensRhoGrossDVR{}.
 Three variants test whether retention is overstated:
@@ -542,6 +546,8 @@ The full list, with the data that would remove each limitation, is in the reposi
 The most important are these.
 (i) Retention is an upper bound.
 Outflows we cannot measure count as retained: rent earned by non-resident owners of Cypriot dwellings, and FDI income from stakes of 10--50\% in domestically controlled firms.
+For the first, recorded FDI income paid by real estate, the industry in which dwellings owned by non-residents are recorded, is about \EUR\RealEstateFdiAbsMax~m a year or less in absolute value from \RealEstateFdiFirstYear{} on (net of reverse investment); whether all such rent is recorded there is not documented, so this bounds only what is recorded.
+The second cannot be separated in published data: FDI income paid by non-SPE enterprises was \EUR\NonSPEFDILastEUR~bn in \LastYear, but it mixes minority stakes with income that holding companies with staff pass on; the balance-of-payments variant of \cref{sec:robust} bounds both.
 (ii) Before 2021, foreign-owned insurers and auxiliary financial firms are missing.
 In 2021, their first year, they accounted for about \InsAuxShareFirstFats{} of GDP (an allocated share of FATS finance).
 (iii) $\theta$ is calibrated on documented large firms, not measured.
