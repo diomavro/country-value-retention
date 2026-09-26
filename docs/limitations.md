@@ -38,9 +38,6 @@ Each limitation says what it biases, in which direction if known, and what data 
 | Industry × country cells | estimated | low |
 | Platform example | illustrative | not a result |
 
-## D. To extend coverage (next data to acquire, in priority order)
+## D. To extend coverage
 
-1. The CBC SPE-adjusted BoP by item and sector, which would replace the S12M rule.
-2. FIGARO full ICIO files for 2010–2022, for value-added origin of imports (the ingest supports `--figaro-year`).
-3. Confidential FATS (NACE × UCI) through a Eurostat/CYSTAT research agreement.
-4. For other EU countries: Frame A already runs for Ireland, Luxembourg, the Netherlands, Greece and Portugal (methodology §9). What is missing there is θ (ownership filings; the Cyprus value is assumed), Luxembourg's BoP by resident sector (confidential), Malta's separate mining and energy accounts, and Frame B (national SIOTs `naio_10_cp1700`).
+The data that would remove each limitation, and who needs to do what, is in [`docs/roadmap.md`](roadmap.md).

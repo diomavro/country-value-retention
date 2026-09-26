@@ -94,7 +94,7 @@ and regulatory filings. Every row carries a source tier and a URL. See
 - SPEs are removed by a sector rule, not entity by entity.
 - No causal claims: the accounting says where income goes, not whether foreign ownership helped or hurt.
 
-Full list: [`docs/limitations.md`](docs/limitations.md).
+Full list: [`docs/limitations.md`](docs/limitations.md). What we plan to fix next, and what needs a human: [`docs/roadmap.md`](docs/roadmap.md).
 
 ## Citation
 
